@@ -1,17 +1,52 @@
 [package]
 name = "frenzy_agent_core"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+
+[[bin]]
+name = "frenzy_agent"
+path = "src/main.rs"
+
+# ============================================================
+# REGRA DE OURO: todas as crates solana-* devem ser "2.2"
+# para bater com o Solana CLI 2.2.0 do ambiente.
+# anchor-client 1.0.0-rc.2 é a única versão que declara
+# solana-sdk = "^2" — qualquer versão anterior (0.29, 0.30)
+# puxa solana-sdk 1.x e explode o resolver.
+# ============================================================
 
 [dependencies]
-# Concorrência e Runtime
-tokio = { version = "1.51.0", features = ["full"] }
-anyhow = "1.0"
+# --- Runtime ---
+tokio       = { version = "1", features = ["full"] }
+anyhow      = "1"
+tracing     = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
-# Solana & Infraestrutura de Roteamento/MEV
+# --- Solana (pinados em 2.2 para bater com o CLI) ---
+solana-sdk          = "2.2"
+solana-client       = "2.2"
+solana-rpc-client   = "2.2"
+
+# --- Anchor Client (única versão com solana-sdk ^2) ---
+anchor-client = "1.0.0-rc.2"
+
+# --- Jupiter V6 Swap API ---
+# Cliente oficial do jup-ag. Faz HTTP para quote-api.jup.ag/v6
+jupiter-swap-api-client = "0.2"
+
+# --- Jito MEV (Bundle + Block Engine) ---
+# SDK oficial da Jito Labs para envio de bundles
 jito-sdk-rust = "0.3.2"
-jupiter-swap-api-client = "0.2.0"
-yellowstone-grpc-client = "13.0.0"
 
-# IA e Agentes Autônomos
-elizaos-plugin-acp = "2.0.0"
+# --- HTTP / Serialização ---
+reqwest     = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+serde       = { version = "1", features = ["derive"] }
+serde_json  = "1"
+
+# --- Config / Env ---
+dotenvy     = "0.15"      # dotenv foi depreciado, dotenvy é o fork mantido
+config      = "0.14"
+
+# --- Utilitários ---
+base64      = "0.22"
+thiserror   = "1"
