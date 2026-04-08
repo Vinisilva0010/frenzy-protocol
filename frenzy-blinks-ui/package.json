@@ -1,0 +1,27 @@
+{
+  "name": "frenzy-blink-interface",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "@solana/web3.js": "^2.0.0",
+    "@solana-program/system": "^2.0.0",
+    "@solana/actions": "^2.4.2",
+    "three": "^0.164.0",
+    "@react-three/fiber": "^8.16.0",
+    "@react-three/drei": "^9.105.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/three": "^0.164.0"
+  }
+}

@@ -1,0 +1,17 @@
+[package]
+name = "frenzy_agent_core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# Concorrência e Runtime
+tokio = { version = "1.51.0", features = ["full"] }
+anyhow = "1.0"
+
+# Solana & Infraestrutura de Roteamento/MEV
+jito-sdk-rust = "0.3.2"
+jupiter-swap-api-client = "0.2.0"
+yellowstone-grpc-client = "13.0.0"
+
+# IA e Agentes Autônomos
+elizaos-plugin-acp = "2.0.0"

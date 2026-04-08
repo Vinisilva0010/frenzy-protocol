@@ -1,0 +1,38 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Rust / Cargo / Anchor
+target/
+**/target/
+debug/
+release/
+**/debug/
+**/release/
+*.rlib
+*.so
+*.a
+**/test-ledger/
+**/.anchor/
+**/dist/
+**/.cache/
+**/sbf-solana-solana/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs / temp
+*.log
+tmp/
+temp/
