@@ -1,5 +1,5 @@
 mod oracle_client;
-
+mod executor;
 use dotenvy::dotenv;
 use solana_client::nonblocking::rpc_client::RpcClient;
 use solana_sdk::signature::{Keypair, Signer};
@@ -7,6 +7,7 @@ use std::env;
 use tracing::{error, info, Level};
 
 use crate::oracle_client::{MarketContext, OracleClient, FrenzySignal};
+use crate::executor::JitoExecutor;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -54,12 +55,18 @@ async fn main() -> anyhow::Result<()> {
 
         info!("Enviando contexto de mercado (SOL: {}%) para o Oráculo...", ctx.price_change_24h_pct);
 
-        match oracle.get_signal(&ctx).await {
+      match oracle.get_signal(&ctx).await {
             Ok(signal) => {
                 match signal {
                     FrenzySignal::Split5050 => info!("🎯 DECISÃO DA IA: Manter SPLIT 50/50. Mercado Neutro."),
                     FrenzySignal::Split8020 => info!("🎯 DECISÃO DA IA: Aumentar risco para 80/20. Mercado Favorável."),
                     FrenzySignal::KillSwitch => error!("🚨 DECISÃO DA IA: KILL SWITCH ATIVADO! Fechar posições imediatamente!"),
+                }
+
+                // Dispara a execução via Jupiter/Jito
+                let executor = JitoExecutor::new();
+                if let Err(e) = executor.execute_strategy(&signal, &rpc_client, &agent_keypair).await {
+                    error!("Falha na execução on-chain: {}", e);
                 }
             }
             Err(e) => {
