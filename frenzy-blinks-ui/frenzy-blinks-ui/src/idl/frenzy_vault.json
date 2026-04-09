@@ -1,0 +1,201 @@
+{
+  "address": "HGZqmfyEWnCjq3rZ2xKbfZhZ4yCXMs4QMQhunexpGW7e",
+  "metadata": {
+    "name": "frenzy_vault",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "initialize",
+      "docs": [
+        "Inicializa o cofre principal da operação"
+      ],
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  101,
+                  110,
+                  122,
+                  121,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "max_loss_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "split_deposit",
+      "docs": [
+        "O usuário deposita USDC. O contrato corta brutalmente em 50/50."
+      ],
+      "discriminator": [
+        32,
+        221,
+        37,
+        208,
+        75,
+        165,
+        170,
+        118
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_state",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "trigger_kill_switch",
+      "docs": [
+        "O botão de pânico. Pode ser chamado pelo Backend (PDA) se o mercado derreter."
+      ],
+      "discriminator": [
+        71,
+        172,
+        218,
+        151,
+        219,
+        230,
+        125,
+        136
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "vault_state"
+          ]
+        },
+        {
+          "name": "vault_state",
+          "writable": true
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "VaultState",
+      "discriminator": [
+        228,
+        196,
+        82,
+        165,
+        98,
+        210,
+        235,
+        152
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "KillSwitchActive",
+      "msg": "Acesso Negado: O Kill-Switch foi ativado. Operações suspensas para proteção de patrimônio."
+    }
+  ],
+  "types": [
+    {
+      "name": "VaultState",
+      "serialization": "bytemuck",
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "safety_balance",
+            "type": "u64"
+          },
+          {
+            "name": "chaos_balance",
+            "type": "u64"
+          },
+          {
+            "name": "max_daily_loss_bps",
+            "type": "u16"
+          },
+          {
+            "name": "kill_switch",
+            "type": "u8"
+          },
+          {
+            "name": "_padding",
+            "type": {
+              "array": [
+                "u8",
+                5
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,3 +1,6 @@
+import * as anchor from "@coral-xyz/anchor";
+import frenzyIdl from "@/idl/frenzy_vault.json";
+
 import {
   ActionGetResponse,
   ActionPostRequest,
@@ -44,7 +47,6 @@ export const GET = async (req: Request) => {
 // O LEÃO: Processando o clique do botão
 export const POST = async (req: Request) => {
   try {
-    // 1. O Twitter nos envia quem é o usuário que clicou
     const body: ActionPostRequest = await req.json();
     let account: PublicKey;
     try {
@@ -53,44 +55,48 @@ export const POST = async (req: Request) => {
       return Response.json({ error: "Conta inválida" }, { status: 400, headers: ACTIONS_CORS_HEADERS });
     }
 
-    // 2. Lemos o valor do botão que ele clicou (1 ou 5 SOL)
     const url = new URL(req.url);
     const amount = Number(url.searchParams.get("amount")) || 1;
+    const lamports = new anchor.BN(amount * 1_000_000_000);
 
-    // 3. Conectamos na nossa rede local (A mesma do backend/Anchor)
     const connection = new Connection("http://127.0.0.1:8899");
+    
+    // Provider "dummy" para o Blink (não precisa de carteira real aqui, o usuário assina no Phantom)
+    const provider = new anchor.AnchorProvider(connection, {} as any, { commitment: "confirmed" });
+    
+    // PEGUE O ID REAL COM 'anchor keys list'
+    const VAULT_STATE_PUBKEY = new PublicKey("HGZqmfyEWnCjq3rZ2xKbfZhZ4yCXMs4QMQhunexpGW7e");
+    
+    // Usamos 'as any' no IDL para o TypeScript parar de reclamar das versões
+    const program = new anchor.Program(frenzyIdl as any, provider);
 
-    // 4. A Chave do nosso Cofre. 
-    // TODO: Cole aqui a chave pública (endereço) do seu Agente ou do Cofre
-    const VAULT_PUBKEY = new PublicKey("7aSDp11gPbCCew7yMSQKuBLr6pcKfgwRPtp2QgAE89f3");
-
-    // 5. Montamos a instrução de transferência on-chain
-    const transferIx = SystemProgram.transfer({
-      fromPubkey: account,
-      toPubkey: VAULT_PUBKEY,
-      lamports: amount * 1_000_000_000, // A Solana não entende 1 SOL, ela entende 1 bilhão de Lamports
-    });
+    // 🚀 A CHAMADA DO CONTRATO
+   const depositIx = await program.methods
+      .splitDeposit(lamports) 
+      .accounts({
+        user: account,
+        vaultState: VAULT_STATE_PUBKEY, // <-- Exatamente como pede o seu lib.rs
+      })
+      .instruction();
 
     const tx = new Transaction();
-    tx.add(transferIx);
-    tx.feePayer = account; // Quem paga a taxa de rede é o usuário, não a gente
+    tx.add(depositIx);
+    tx.feePayer = account; 
     
     const { blockhash } = await connection.getLatestBlockhash();
     tx.recentBlockhash = blockhash;
 
-    // 6. Empacotamos e devolvemos pro Phantom do usuário ler
-    // 6. Empacotamos e devolvemos pro Phantom do usuário ler
     const payload: ActionPostResponse = await createPostResponse({
       fields: {
-        type: "transaction", // <-- A CORREÇÃO É ESTA LINHA
+        type: "transaction",
         transaction: tx,
-        message: `Pronto para depositar ${amount} SOL. O FRENZY assume daqui.`,
+        message: `FRENZY Contract Called! Depositing ${amount} SOL.`,
       },
     });
 
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
-    console.error("Erro na montagem da Action:", err);
-    return Response.json({ error: "Falha na criação da transação" }, { status: 500, headers: ACTIONS_CORS_HEADERS });
+    console.error("Erro na integração:", err);
+    return Response.json({ error: "Falha na transação do contrato" }, { status: 500, headers: ACTIONS_CORS_HEADERS });
   }
 };
