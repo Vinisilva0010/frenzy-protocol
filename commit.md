@@ -1,5 +1,5 @@
 cd ~/frenzy-protocol
 git status
 git add .
-git commit -m "criação da pasta backend"
+git commit -m "relatorio"
 git push origin main
