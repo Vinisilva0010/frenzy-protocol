@@ -100,3 +100,4 @@ export const POST = async (req: Request) => {
     return Response.json({ error: "Falha na transação do contrato" }, { status: 500, headers: ACTIONS_CORS_HEADERS });
   }
 };
+
