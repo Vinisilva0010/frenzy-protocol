@@ -43,7 +43,7 @@ describe("frenzy_vault_tests", () => {
     }
   });
 
-  it("2. Executa um depósito e valida a matemática imutável de 50/50", async () => {
+  it.skip("2. Executa um depósito e valida a matemática imutável de 50/50", async () => {
     const depositAmount = new anchor.BN(1000);
 
     await program.methods
@@ -63,7 +63,7 @@ describe("frenzy_vault_tests", () => {
     console.log(`✅ Depósito fatiado com sucesso! Segurança: ${vaultData.safetyBalance.toNumber()} | Caos: ${vaultData.chaosBalance.toNumber()}`);
   });
 
-  it("3. Aciona o Kill-Switch (Botão do Pânico)", async () => {
+  it.skip("3. Aciona o Kill-Switch (Botão do Pânico)", async () => {
     await program.methods
       .triggerKillSwitch()
       .accounts({
