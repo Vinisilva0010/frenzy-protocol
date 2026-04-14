@@ -8,6 +8,7 @@ import ArchitectureCarousel from '@/components/ArchitectureCarousel'
 import FaqSection from '@/components/FaqSection'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
+import SecuritySection from '@/components/SecuritySection'
 export default function Home() {
   return (
     <>
@@ -17,6 +18,7 @@ export default function Home() {
       <VaultCanvas />
       <DividerTape />
       <VideoPanel />
+      <SecuritySection />
        <DividerTape />
       <BlinkSection />
       <DividerTape />
