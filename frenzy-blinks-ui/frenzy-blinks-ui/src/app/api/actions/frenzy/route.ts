@@ -59,7 +59,7 @@ export const POST = async (req: Request) => {
     const amount = Number(url.searchParams.get("amount")) || 1;
     const lamports = new anchor.BN(amount * 1_000_000_000);
 
-    const connection = new Connection("http://127.0.0.1:8899");
+    const connection = new Connection("https://api.devnet.solana.com", "confirmed");
     
     // Provider "dummy" para o Blink (não precisa de carteira real aqui, o usuário assina no Phantom)
     const provider = new anchor.AnchorProvider(connection, {} as any, { commitment: "confirmed" });

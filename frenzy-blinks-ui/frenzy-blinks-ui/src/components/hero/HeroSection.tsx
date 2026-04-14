@@ -94,7 +94,7 @@ export default function HeroSection() {
         }}
       >
         <Image
-          src="/bg-cyber.webp2" // Joga sua imagem aqui
+          src="/bg-cyber3.webp" // Joga sua imagem aqui
           alt="Institutional Cryogenic Vault Wall"
           fill
           className="object-cover object-left"
@@ -113,10 +113,10 @@ export default function HeroSection() {
         }}
       >
         <Image
-          src="/bg-cyber.webp2" // Joga sua imagem aqui
+          src="/bg-cyber3.webp" // Joga sua imagem aqui
           alt="Chaotic Overheating Degen Server Wall"
           fill
-          className="object-cover object-right"
+          className="object-cover object-right  "
           priority
           sizes="(max-width: 768px) 100vw, 50vw"
         />

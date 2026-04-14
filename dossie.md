@@ -1,39 +1,18 @@
-Arquitetura Geral do FRENZY Protocol
-O nosso protocolo é um cofre de gerenciamento de risco de código aberto focado em dividir a exposição do investidor ao meio. Metade do capital fica protegida e a outra metade busca aceleração máxima. Diferente de projetos amadores, nós não dependemos de cliques manuais. Nós construímos um motor autônomo integrado com a velocidade da rede Solana.
+Arquitetura de Elite: FRENZY Protocol
+O Core: Gestão de Risco Híbrida e Autônoma
+O FRENZY não é apenas um cofre; é uma fundação de gerenciamento de risco de código aberto projetada para o investidor que não aceita o "tudo ou nada". Nossa arquitetura divide o capital cirurgicamente: 50% em Deep Safety (preservação de patrimônio) e 50% em Maximum Chaos (exposição a Alpha de alta performance). Removemos o erro humano da equação. Enquanto outros protocolos dependem de cliques lentos e decisões emocionais, nós rodamos um motor autônomo que opera na velocidade da luz da rede Solana.
 
-Motor On-Chain com Smart Contracts em Anchor
-Na fundação do projeto, nós escrevemos o contrato inteligente nativo em Rust usando o framework Anchor. A estrutura principal é o VaultState, uma conta descentralizada que guarda o estado do cofre na blockchain. A instrução central que desenvolvemos se chama splitDeposit. Quando o usuário interage com essa função, o contrato recebe os fundos e matematicamente separa os montantes de segurança e de caos. Tudo isso rodando em baixo nível na Solana, garantindo que ninguém altere as regras do jogo.
+Camada On-Chain: Imutabilidade via Anchor (Rust)
+A espinha dorsal do protocolo reside em Smart Contracts desenvolvidos em Rust com o framework Anchor. Nossa estrutura VaultState é uma conta descentralizada e auditável que governa o estado financeiro do cofre. A instrução mestre splitDeposit é um triunfo de lógica determinística: ela recebe os fundos e, no nível da instrução, executa a separação matemática dos montantes. Isso garante que as regras de risco sejam imutáveis — o código é a lei e não há backdoors.
 
-O Cão de Guarda em Rust Puro
-Para garantir a segurança institucional, nós não usamos soluções de prateleira. Nós levantamos um backend robusto escrito em Rust puro com a biblioteca assíncrona Tokio. Esse backend atua como um Oráculo de baixa latência. Ele se conecta à rede local via RPC, lê o saldo em tempo real e avalia as condições. O grande diferencial tático aqui foi a integração com hardware LPU da Groq. O nosso código Rust empacota o contexto do mercado e envia para um modelo de inferência ultrarrápido na nuvem, mantendo o consumo de memória do servidor baixo e a velocidade de resposta absurda.
+O Sentinela: Backend de Alta Performance em Rust Puro
+Segurança institucional exige infraestrutura dedicada. Nosso "Cão de Guarda" é um backend robusto construído sobre a biblioteca assíncrona Tokio. Este oráculo de baixíssima latência monitora o estado da rede via RPC em tempo real. O diferencial competitivo? A integração com hardware LPU da Groq. Através de modelos de inferência ultrarrápidos, processamos o contexto de mercado na nuvem e devolvemos decisões em milissegundos, mantendo uma pegada de memória mínima e uma eficiência de execução brutal.
 
-Mecanismo de Defesa Kill Switch
-O marketing vai adorar essa parte. O nosso agente possui uma trava rígida de segurança. Se o oráculo detectar uma queda abrupta no mercado superior a uma porcentagem crítica definida na nossa arquitetura, o Rust aciona imediatamente a instrução triggerKillSwitch. Esse comando trava os fundos e protege o patrimônio do usuário contra liquidações em cascata enquanto ele dorme. É proteção de nível de fundo hedge executada de forma descentralizada.
+Protocolo de Emergência: Inteligência Artificial & Kill Switch
+Segurança não é apenas evitar bugs, é prever desastres. O FRENZY integra um agente de IA que atua como um oficial de risco 24/7. Ao detectar anomalias de mercado ou quedas que ultrapassem a porcentagem crítica da nossa arquitetura, o backend dispara imediatamente a instrução triggerKillSwitch. Esse mecanismo de defesa trava as operações do cofre on-chain, protegendo o patrimônio contra liquidações em cascata e derretimentos de liquidez. É a proteção de um fundo de hedge de Wall Street, rodando de forma permissionless.
 
-A Vitrine de Conversão via Solana Blinks
-Para a aquisição de usuários, nós ignoramos a fricção tradicional de conectar carteiras em sites complexos. Nós construímos uma API em Next.js versão 16 com compilador Turbopack. Essa infraestrutura atua como o cérebro dos nossos Blinks. Implementamos a rota GET para renderizar a interface diretamente no feed do X com a nossa comunicação direta e agressiva, capturando a atenção do investidor onde ele já está navegando.
+UX de Ataque: Solana Blinks & Next.js 16
+Para escalar como uma startup global, destruímos a barreira de entrada. Utilizamos Next.js 16 com o compilador Turbopack para gerenciar nossa infraestrutura de Blinks. Através de rotas GET otimizadas, injetamos nossa interface de alta conversão diretamente no feed do X (Twitter). O investidor não precisa "navegar" até nós; o FRENZY vai até onde o Alpha está sendo discutido, eliminando a fricção e o medo de sites desconhecidos.
 
-Transações Complexas em Um Clique
-O verdadeiro triunfo da engenharia foi a rota POST da nossa API. Nós importamos a Interface de Descrição do Anchor diretamente para o frontend Next.js. Quando o usuário clica no botão de depósito no meio da timeline do X, a nossa API não faz uma transferência burra. Ela empacota uma instrução complexa chamando o método splitDeposit do nosso contrato, constrói a transação em formato Base64 e devolve para a extensão Phantom do usuário assinar. A mágica é que o usuário interage com o contrato inteligente sem nunca precisar sair da rede social.
-
-
-
-
-Arquitetura Geral do FRENZY Protocol
-O nosso protocolo é um cofre de gerenciamento de risco de código aberto focado em dividir a exposição do investidor ao meio. Metade do capital fica protegida e a outra metade busca aceleração máxima. Diferente de projetos amadores, nós não dependemos de cliques manuais. Nós construímos um motor autônomo integrado com a velocidade da rede Solana.
-
-Motor On-Chain com Smart Contracts em Anchor
-Na fundação do projeto, nós escrevemos o contrato inteligente nativo em Rust usando o framework Anchor. A estrutura principal é o VaultState, uma conta descentralizada que guarda o estado do cofre na blockchain. A instrução central que desenvolvemos se chama splitDeposit. Quando o usuário interage com essa função, o contrato recebe os fundos e matematicamente separa os montantes de segurança e de caos. Tudo isso rodando em baixo nível na Solana, garantindo que ninguém altere as regras do jogo.
-
-O Cão de Guarda em Rust Puro
-Para garantir a segurança institucional, nós não usamos soluções de prateleira. Nós levantamos um backend robusto escrito em Rust puro com a biblioteca assíncrona Tokio. Esse backend atua como um Oráculo de baixa latência. Ele se conecta à rede local via RPC, lê o saldo em tempo real e avalia as condições. O grande diferencial tático aqui foi a integração com hardware LPU da Groq. O nosso código Rust empacota o contexto do mercado e envia para um modelo de inferência ultrarrápido na nuvem, mantendo o consumo de memória do servidor baixo e a velocidade de resposta absurda.
-
-Mecanismo de Defesa Kill Switch
-O marketing vai adorar essa parte. O nosso agente possui uma trava rígida de segurança. Se o oráculo detectar uma queda abrupta no mercado superior a uma porcentagem crítica definida na nossa arquitetura, o Rust aciona imediatamente a instrução triggerKillSwitch. Esse comando trava os fundos e protege o patrimônio do usuário contra liquidações em cascata enquanto ele dorme. É proteção de nível de fundo hedge executada de forma descentralizada.
-
-A Vitrine de Conversão via Solana Blinks
-Para a aquisição de usuários, nós ignoramos a fricção tradicional de conectar carteiras em sites complexos. Nós construímos uma API em Next.js versão 16 com compilador Turbopack. Essa infraestrutura atua como o cérebro dos nossos Blinks. Implementamos a rota GET para renderizar a interface diretamente no feed do X com a nossa comunicação direta e agressiva, capturando a atenção do investidor onde ele já está navegando.
-
-Transações Complexas em Um Clique
-O verdadeiro triunfo da engenharia foi a rota POST da nossa API. Nós importamos a Interface de Descrição do Anchor diretamente para o frontend Next.js. Quando o usuário clica no botão de depósito no meio da timeline do X, a nossa API não faz uma transferência burra. Ela empacota uma instrução complexa chamando o método splitDeposit do nosso contrato, constrói a transação em formato Base64 e devolve para a extensão Phantom do usuário assinar. A mágica é que o usuário interage com o contrato inteligente sem nunca precisar sair da rede social.
-
+Engenharia de Execução: Transações Complexas e Anti-MEV
+O ápice da nossa integração é o fluxo de transações via rotas POST. Ao importar a IDL do Anchor diretamente para o frontend, transformamos um clique social em uma execução on-chain sofisticada. Não enviamos transações "burras"; empacotamos a chamada do método splitDeposit, convertemos em Base64 e entregamos para o usuário assinar via Phantom sem que ele saia da sua timeline. Todo o fluxo é desenhado para ser compatível com bundles Jito, garantindo proteção contra robôs de MEV e garantindo que o valor capturado fique com o usuário.

@@ -40,10 +40,10 @@ export default function BlinkSection() {
         {/* Background Ambient (Cyber-Neon) */}
         <div className="absolute inset-0 z-[1] opacity-30 pointer-events-none select-none">
           <Image
-            src="/vault-front.png" 
+            src="/bg-cyber4.webp" 
             alt=""
             fill
-            className="object-cover"
+            className="object-cover scale-110"
             priority
           />
         </div>
