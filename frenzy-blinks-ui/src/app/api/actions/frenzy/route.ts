@@ -83,23 +83,49 @@ export const POST = async (req: Request) => {
       PROGRAM_ID
     );
 
-    // Chamando a instrução do Rust
+    const instructions = [];
+
+    // ==========================================
+    // O PULO DO GATO: O Cofre já existe?
+    // ==========================================
+    const vaultAccountInfo = await connection.getAccountInfo(vaultPda);
+    
+    if (!vaultAccountInfo) {
+      // Se a conta for null, o usuário é novo. Embutimos a instrução de criação!
+      // Lembra do limite de 1000 bps que você colocou no teste? Mandamos aqui.
+      const initIx = await program.methods
+        .initialize(1000) 
+        .accounts({
+          authority: account,
+          vaultState: vaultPda,
+          systemProgram: SystemProgram.programId,
+        })
+        .instruction();
+        
+      instructions.push(initIx);
+      console.log("🛠️  Adicionada instrução de inicialização do cofre.");
+    }
+
+    // ==========================================
+    // A Instrução Principal: O Depósito
+    // ==========================================
     const depositIx = await program.methods
       .splitDeposit(lamports) 
       .accounts({
         user: account,
         vaultState: vaultPda,
-        systemProgram: SystemProgram.programId,
       })
       .instruction();
 
+    instructions.push(depositIx);
+
     const { blockhash } = await connection.getLatestBlockhash("confirmed");
 
-    // Empacotando no formato VersionedTransaction exigido pela Phantom
+    // Empacotando TUDO (Criação + Depósito) na mesma VersionedTransaction
     const messageV0 = new TransactionMessage({
       payerKey: account,
       recentBlockhash: blockhash,
-      instructions: [depositIx],
+      instructions: instructions, // <-- Agora enviamos o array dinâmico
     }).compileToV0Message();
 
     const tx = new VersionedTransaction(messageV0);
