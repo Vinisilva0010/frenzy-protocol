@@ -17,13 +17,49 @@ import {
   TransactionMessage,
 } from "@solana/web3.js";
 
-// ... [O SEU GET E OPTIONS CONTINUAM IGUAIS AQUI EM CIMA] ...
+// ==========================================
+// 1. O PORTEIRO (Libera o acesso da Phantom)
+// ==========================================
+export const OPTIONS = async () => {
+  return new Response(null, { headers: ACTIONS_CORS_HEADERS });
+};
 
-// O LEÃO: Processando o clique do botão
+// ==========================================
+// 2. A VITRINE (O Card visual do X)
+// ==========================================
+export const GET = async (req: Request) => {
+  const payload: ActionGetResponse = {
+    title: "FRENZY Protocol",
+    icon: "https://ucarecdn.com/7aa46c85-08a4-4bc7-9376-88ec48bb1f43/-/preview/880x864/-/quality/smart/-/format/auto/", 
+    description: "50% Paz de Espírito. 50% Aceleração Máxima. Separe seu risco e fuja do caos do mercado direto da timeline.",
+    label: "Entrar no Cofre",
+    links: {
+      actions: [
+        {
+          type: "transaction",
+          label: "Depositar 1 SOL",
+          href: "/api/actions/frenzy?amount=1",
+        },
+        {
+          type: "transaction",
+          label: "Depositar 5 SOL",
+          href: "/api/actions/frenzy?amount=5",
+        },
+      ],
+    },
+  };
+
+  return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
+};
+
+// ==========================================
+// 3. O MOTOR (A Transação HFT do Anchor)
+// ==========================================
 export const POST = async (req: Request) => {
   try {
     const body: ActionPostRequest = await req.json();
     let account: PublicKey;
+    
     try {
       account = new PublicKey(body.account);
     } catch (err) {
@@ -38,28 +74,28 @@ export const POST = async (req: Request) => {
     const provider = new anchor.AnchorProvider(connection, {} as any, { commitment: "confirmed" });
     const program = new anchor.Program(frenzyIdl as any, provider);
 
-    // 1. A CHAVE MESTRA: O seu Program ID real
+    // O seu Program ID real na Devnet
     const PROGRAM_ID = new PublicKey("HGZqmfyEWnCjq3rZ2xKbfZhZ4yCXMs4QMQhunexpGW7e");
 
-    // 2. A MÁGICA HFT: Derivando o Cofre (PDA) on-the-fly para o usuário que clicou
+    // Derivando o Cofre (PDA) matemático do usuário
     const [vaultPda] = PublicKey.findProgramAddressSync(
       [Buffer.from("frenzy_state"), account.toBuffer()],
       PROGRAM_ID
     );
 
-    // 3. A CHAMADA DO CONTRATO
+    // Chamando a instrução do Rust
     const depositIx = await program.methods
       .splitDeposit(lamports) 
       .accounts({
         user: account,
-        vaultState: vaultPda, // <-- Agora sim, o cofre exato!
-        systemProgram: SystemProgram.programId, // Garantia de segurança pro Anchor
+        vaultState: vaultPda,
+        systemProgram: SystemProgram.programId,
       })
       .instruction();
 
-    const { blockhash } = await connection.getLatestBlockhash();
+    const { blockhash } = await connection.getLatestBlockhash("confirmed");
 
-    // 4. PADRÃO OURO: Empacotando em Versioned Transaction
+    // Empacotando no formato VersionedTransaction exigido pela Phantom
     const messageV0 = new TransactionMessage({
       payerKey: account,
       recentBlockhash: blockhash,
@@ -68,16 +104,16 @@ export const POST = async (req: Request) => {
 
     const tx = new VersionedTransaction(messageV0);
 
-    // 5. A RESPOSTA FINAL PARA A PHANTOM
     const payload: ActionPostResponse = await createPostResponse({
       fields: {
         type: "transaction",
         transaction: tx,
-        message: `FRENZY Contract Called! Depositando ${amount} SOL com sucesso.`,
+        message: `FRENZY Protocol: Cofre acessado! Depositando ${amount} SOL.`,
       },
     });
 
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
+
   } catch (err) {
     console.error("Erro na integração:", err);
     return Response.json({ error: "Falha na transação do contrato" }, { status: 500, headers: ACTIONS_CORS_HEADERS });
