@@ -1,37 +1,68 @@
 "use client";
 
 import '@dialectlabs/blinks/index.css';
+import '@solana/wallet-adapter-react-ui/styles.css';
+
+import { useMemo } from 'react';
 import { Blink, useBlink } from '@dialectlabs/blinks';
 import { useBlinkSolanaWalletAdapter } from '@dialectlabs/blinks/hooks/solana';
+import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 
-export default function DemoPage() {
-  // Conecta o motor visual direto na Devnet
+// ==========================================
+// 1. O MOTOR DE RENDERIZAÇÃO
+// ==========================================
+function BlinkRenderer() {
   const { adapter } = useBlinkSolanaWalletAdapter('https://api.devnet.solana.com');
   
-  // A API nova agora usa useBlink e pede só a URL aqui dentro
+  // URL com bypass de cache agresivo pra Vercel não entregar lixo antigo
   const { blink, isLoading } = useBlink({ 
-    url: 'https://frenzy.zanvexis.com/api/actions/frenzy?v=11' 
+    url: 'https://frenzy.zanvexis.com/api/actions/frenzy?v=15' 
   });
 
+  if (isLoading) {
+    return <p className="text-[#14F195] mt-8 text-xl font-bold animate-pulse text-center">⏳ Sincronizando com a Devnet...</p>;
+  }
+
+  if (!blink) {
+    return <p className="text-red-500 mt-8 text-xl font-bold text-center">🚨 Erro: Blink não encontrado.</p>;
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] p-4 font-sans">
-      <div className="w-full max-w-md flex flex-col items-center">
-        <h1 className="text-[#14F195] text-2xl font-black mb-8 uppercase tracking-widest text-center">
-          FRENZY Protocol Live Demo
-        </h1>
-        
-        {isLoading || !blink ? (
-          <p className="text-[#14F195] animate-pulse">Carregando Motor On-Chain...</p>
-        ) : (
-          // O componente agora recebe 'blink' e o 'adapter' separados!
-          <Blink 
-            blink={blink} 
-            adapter={adapter}
-            securityLevel="all" 
-            stylePreset="default"
-          />
-        )}
-      </div>
+    <div className="mt-8 w-full">
+      <Blink 
+        blink={blink} 
+        adapter={adapter}
+        securityLevel="all" 
+        stylePreset="default"
+      />
     </div>
+  );
+}
+
+// ==========================================
+// 2. A CARCAÇA BLINDADA DA PÁGINA
+// ==========================================
+export default function DemoPage() {
+  const endpoint = "https://api.devnet.solana.com";
+  const wallets = useMemo(() => [], []); // Puxa os adapters padrão (Phantom, Solflare, etc)
+
+  return (
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider wallets={wallets} autoConnect>
+        <WalletModalProvider>
+          <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0a0a] p-4 font-sans">
+            <h1 className="text-[#14F195] text-3xl font-black mb-6 uppercase tracking-widest text-center drop-shadow-md">
+              FRENZY Protocol Live Demo
+            </h1>
+            
+            {/* Caixa de contenção para garantir que o Card não seja esmagado */}
+            <div className="w-full max-w-lg bg-white/5 p-6 rounded-2xl border border-[#14F195]/20 shadow-[0_0_30px_rgba(20,241,149,0.1)] flex flex-col items-center">
+              <BlinkRenderer />
+            </div>
+          </div>
+        </WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
   );
 }
