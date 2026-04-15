@@ -18,14 +18,14 @@ import {
 } from "@solana/web3.js";
 
 // ==========================================
-// 1. O PORTEIRO (Libera o acesso da Phantom)
+// 1. O PORTEIRO (CORS para pré-atendimento)
 // ==========================================
 export const OPTIONS = async () => {
   return new Response(null, { headers: ACTIONS_CORS_HEADERS });
 };
 
 // ==========================================
-// 2. A VITRINE (O Card visual do X)
+// 2. A VITRINE (A requisição GET)
 // ==========================================
 export const GET = async (req: Request) => {
   const payload: ActionGetResponse = {
@@ -49,11 +49,12 @@ export const GET = async (req: Request) => {
     },
   };
 
+  // Carimbo CORS garantido aqui!
   return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
 };
 
 // ==========================================
-// 3. O MOTOR (A Transação HFT do Anchor)
+// 3. O MOTOR (O processamento do Depósito)
 // ==========================================
 export const POST = async (req: Request) => {
   try {
@@ -85,14 +86,11 @@ export const POST = async (req: Request) => {
 
     const instructions = [];
 
-    // ==========================================
-    // O PULO DO GATO: O Cofre já existe?
-    // ==========================================
+    // Lógica inteligente: o usuário já tem cofre?
     const vaultAccountInfo = await connection.getAccountInfo(vaultPda);
     
     if (!vaultAccountInfo) {
-      // Se a conta for null, o usuário é novo. Embutimos a instrução de criação!
-      // Lembra do limite de 1000 bps que você colocou no teste? Mandamos aqui.
+      // Se não tiver, embutimos a criação (init-if-needed)
       const initIx = await program.methods
         .initialize(1000) 
         .accounts({
@@ -103,12 +101,9 @@ export const POST = async (req: Request) => {
         .instruction();
         
       instructions.push(initIx);
-      console.log("🛠️  Adicionada instrução de inicialização do cofre.");
     }
 
-    // ==========================================
-    // A Instrução Principal: O Depósito
-    // ==========================================
+    // A Instrução Principal: Depósito
     const depositIx = await program.methods
       .splitDeposit(lamports) 
       .accounts({
@@ -121,11 +116,11 @@ export const POST = async (req: Request) => {
 
     const { blockhash } = await connection.getLatestBlockhash("confirmed");
 
-    // Empacotando TUDO (Criação + Depósito) na mesma VersionedTransaction
+    // Empacotando em Versioned Transaction (formato aceito pela Phantom)
     const messageV0 = new TransactionMessage({
       payerKey: account,
       recentBlockhash: blockhash,
-      instructions: instructions, // <-- Agora enviamos o array dinâmico
+      instructions: instructions,
     }).compileToV0Message();
 
     const tx = new VersionedTransaction(messageV0);
@@ -138,10 +133,12 @@ export const POST = async (req: Request) => {
       },
     });
 
+    // Carimbo CORS garantido no sucesso!
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
 
   } catch (err) {
     console.error("Erro na integração:", err);
+    // Carimbo CORS garantido no erro!
     return Response.json({ error: "Falha na transação do contrato" }, { status: 500, headers: ACTIONS_CORS_HEADERS });
   }
 };
