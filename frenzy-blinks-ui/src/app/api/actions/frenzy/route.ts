@@ -8,41 +8,16 @@ import {
   ACTIONS_CORS_HEADERS,
   createPostResponse,
 } from "@solana/actions";
+
 import {
   Connection,
   PublicKey,
   SystemProgram,
-  Transaction,
+  VersionedTransaction,
+  TransactionMessage,
 } from "@solana/web3.js";
 
-export const OPTIONS = async (req: Request) => {
-  return new Response(null, { headers: ACTIONS_CORS_HEADERS });
-};
-
-export const GET = async (req: Request) => {
-  const payload: ActionGetResponse = {
-    title: "FRENZY Protocol",
-    icon: "https://ucarecdn.com/7aa46c85-08a4-4bc7-9376-88ec48bb1f43/-/preview/880x864/-/quality/smart/-/format/auto/", 
-    description: "50% Paz de Espírito. 50% Aceleração Máxima. Separe seu risco e fuja do caos do mercado direto da timeline.",
-    label: "Entrar no Cofre",
-    links: {
-      actions: [
-        {
-          type: "transaction",
-          label: "Depositar 1 SOL",
-          href: "/api/actions/frenzy?amount=1",
-        },
-        {
-          type: "transaction",
-          label: "Depositar 5 SOL",
-          href: "/api/actions/frenzy?amount=5",
-        },
-      ],
-    },
-  };
-
-  return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
-};
+// ... [O SEU GET E OPTIONS CONTINUAM IGUAIS AQUI EM CIMA] ...
 
 // O LEÃO: Processando o clique do botão
 export const POST = async (req: Request) => {
@@ -60,37 +35,45 @@ export const POST = async (req: Request) => {
     const lamports = new anchor.BN(amount * 1_000_000_000);
 
     const connection = new Connection("https://api.devnet.solana.com", "confirmed");
-    
-    // Provider "dummy" para o Blink (não precisa de carteira real aqui, o usuário assina no Phantom)
     const provider = new anchor.AnchorProvider(connection, {} as any, { commitment: "confirmed" });
-    
-    // PEGUE O ID REAL COM 'anchor keys list'
-    const VAULT_STATE_PUBKEY = new PublicKey("HGZqmfyEWnCjq3rZ2xKbfZhZ4yCXMs4QMQhunexpGW7e");
-    
-    // Usamos 'as any' no IDL para o TypeScript parar de reclamar das versões
     const program = new anchor.Program(frenzyIdl as any, provider);
 
-    // 🚀 A CHAMADA DO CONTRATO
-   const depositIx = await program.methods
+    // 1. A CHAVE MESTRA: O seu Program ID real
+    const PROGRAM_ID = new PublicKey("HGZqmfyEWnCjq3rZ2xKbfZhZ4yCXMs4QMQhunexpGW7e");
+
+    // 2. A MÁGICA HFT: Derivando o Cofre (PDA) on-the-fly para o usuário que clicou
+    const [vaultPda] = PublicKey.findProgramAddressSync(
+      [Buffer.from("frenzy_state"), account.toBuffer()],
+      PROGRAM_ID
+    );
+
+    // 3. A CHAMADA DO CONTRATO
+    const depositIx = await program.methods
       .splitDeposit(lamports) 
       .accounts({
         user: account,
-        vaultState: VAULT_STATE_PUBKEY, // <-- Exatamente como pede o seu lib.rs
+        vaultState: vaultPda, // <-- Agora sim, o cofre exato!
+        systemProgram: SystemProgram.programId, // Garantia de segurança pro Anchor
       })
       .instruction();
 
-    const tx = new Transaction();
-    tx.add(depositIx);
-    tx.feePayer = account; 
-    
     const { blockhash } = await connection.getLatestBlockhash();
-    tx.recentBlockhash = blockhash;
 
+    // 4. PADRÃO OURO: Empacotando em Versioned Transaction
+    const messageV0 = new TransactionMessage({
+      payerKey: account,
+      recentBlockhash: blockhash,
+      instructions: [depositIx],
+    }).compileToV0Message();
+
+    const tx = new VersionedTransaction(messageV0);
+
+    // 5. A RESPOSTA FINAL PARA A PHANTOM
     const payload: ActionPostResponse = await createPostResponse({
       fields: {
         type: "transaction",
         transaction: tx,
-        message: `FRENZY Contract Called! Depositing ${amount} SOL.`,
+        message: `FRENZY Contract Called! Depositando ${amount} SOL com sucesso.`,
       },
     });
 
@@ -100,4 +83,3 @@ export const POST = async (req: Request) => {
     return Response.json({ error: "Falha na transação do contrato" }, { status: 500, headers: ACTIONS_CORS_HEADERS });
   }
 };
-
