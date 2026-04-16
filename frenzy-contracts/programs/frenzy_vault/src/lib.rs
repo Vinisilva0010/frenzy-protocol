@@ -53,34 +53,38 @@ pub mod frenzy_vault {
         Ok(())
     }
 
-    // =================================================================
+   // =================================================================
     // A NOVA FUNÇÃO: O Saque (Withdraw)
     // =================================================================
     pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
-        let mut vault = ctx.accounts.vault_state.load_mut()?;
-        
-        // Calcula o total que o cara tem (Segurança + Caos)
-        let total_balance = vault.safety_balance.checked_add(vault.chaos_balance).unwrap();
-        require!(amount <= total_balance, FrenzyError::InsufficientFunds);
+        // 1. Abre a porta, faz a matemática e FECHA A PORTA (O bloco solta a memória)
+        {
+            let mut vault = ctx.accounts.vault_state.load_mut()?;
+            
+            let total_balance = vault.safety_balance.checked_add(vault.chaos_balance).unwrap();
+            require!(amount <= total_balance, FrenzyError::InsufficientFunds);
 
-        // Desconta matematicamente 50/50 para manter o balanço
-        let safe_deduction = (amount as u128 * vault.safety_balance as u128 / total_balance as u128) as u64;
-        let chaos_deduction = amount - safe_deduction;
+            // Desconta 50/50 do registro matemático
+            let safe_deduction = (amount as u128 * vault.safety_balance as u128 / total_balance as u128) as u64;
+            let chaos_deduction = amount - safe_deduction;
 
-        vault.safety_balance = vault.safety_balance.checked_sub(safe_deduction).unwrap();
-        vault.chaos_balance = vault.chaos_balance.checked_sub(chaos_deduction).unwrap();
+            vault.safety_balance = vault.safety_balance.checked_sub(safe_deduction).unwrap();
+            vault.chaos_balance = vault.chaos_balance.checked_sub(chaos_deduction).unwrap();
+        }
 
-        // Checa se o cofre tem SOL suficiente descontando a taxa de aluguel da Solana
+        // 2. Agora, com a memória liberada, mexemos nos Lamports físicos!
         let vault_info = ctx.accounts.vault_state.to_account_info();
+        let user_info = ctx.accounts.user.to_account_info();
+        
         let rent = Rent::get()?;
         let min_rent = rent.minimum_balance(vault_info.data_len());
         let available_lamports = vault_info.lamports().saturating_sub(min_rent);
 
         require!(amount <= available_lamports, FrenzyError::InsufficientFunds);
 
-        // A Mágica: Tira os Lamports do cofre e joga na mão do usuário (modificação direta de memória)
-        **ctx.accounts.vault_state.to_account_info().try_borrow_mut_lamports()? -= amount;
-        **ctx.accounts.user.to_account_info().try_borrow_mut_lamports()? += amount;
+        // Subtrai do cofre e soma na carteira do usuário
+        **vault_info.try_borrow_mut_lamports()? -= amount;
+        **user_info.try_borrow_mut_lamports()? += amount;
 
         msg!("FRENZY: Saque de {} lamports liberado com sucesso.", amount);
         Ok(())
