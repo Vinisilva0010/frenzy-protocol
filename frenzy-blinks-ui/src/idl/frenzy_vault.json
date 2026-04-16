@@ -67,6 +67,44 @@
       ]
     },
     {
+      "name": "inject_mock_yield",
+      "discriminator": [
+        97,
+        76,
+        70,
+        255,
+        51,
+        62,
+        21,
+        193
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_state",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "safe_yield",
+          "type": "u64"
+        },
+        {
+          "name": "chaos_yield",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "split_deposit",
       "discriminator": [
         32,

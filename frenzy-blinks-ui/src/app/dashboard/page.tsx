@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { ConnectionProvider, WalletProvider, useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { PublicKey, Transaction } from "@solana/web3.js";
+import { PublicKey, SystemProgram } from "@solana/web3.js";
 import * as anchor from "@coral-xyz/anchor";
 import frenzyIdl from "@/idl/frenzy_vault.json";
 
@@ -11,9 +11,6 @@ import '@solana/wallet-adapter-react-ui/styles.css';
 
 const PROGRAM_ID = new PublicKey("HGZqmfyEWnCjq3rZ2xKbfZhZ4yCXMs4QMQhunexpGW7e");
 
-// =========================================================
-// 1. O CONTEÚDO DO DASHBOARD (Agora com o botão de Saque)
-// =========================================================
 function DashboardContent() {
   const { connection } = useConnection();
   const { publicKey, sendTransaction, wallet } = useWallet();
@@ -50,14 +47,15 @@ function DashboardContent() {
     return () => clearInterval(interval);
   }, [publicKey, connection]);
 
-  // 🔥 A MÁGICA DO SAQUE 🔥
+  // ==========================================
+  // FUNÇÃO DE SAQUE (O usuário tira o dinheiro)
+  // ==========================================
   const handleWithdraw = async () => {
     if (!publicKey || !wallet) {
       alert("Conecte sua carteira primeiro!");
       return;
     }
 
-    // Pergunta simples para o MVP (no futuro a gente faz um modal bonitão)
     const amountStr = window.prompt(`Você tem ${vaultBalance.toFixed(3)} SOL disponíveis. Quanto deseja sacar?`, "1");
     if (!amountStr) return;
 
@@ -68,7 +66,6 @@ function DashboardContent() {
     }
 
     try {
-      // 1. Prepara o motor do Anchor no Frontend
       const provider = new anchor.AnchorProvider(connection, (window as any).solana, { commitment: "confirmed" });
       const program = new anchor.Program(frenzyIdl as any, provider);
 
@@ -79,7 +76,6 @@ function DashboardContent() {
 
       const lamports = new anchor.BN(amountNum * 1_000_000_000);
 
-      // 2. Monta a transação de saque batendo na função withdraw do Rust
       const tx = await program.methods
         .withdraw(lamports)
         .accounts({
@@ -92,15 +88,11 @@ function DashboardContent() {
       tx.recentBlockhash = blockhash;
       tx.feePayer = publicKey;
 
-      // 3. Pede pro usuário assinar e envia pra rede
       const signature = await sendTransaction(tx, connection);
       alert(`🚀 Transação enviada! Assinatura: ${signature}\nAguarde alguns segundos...`);
 
-      // 4. Confirmação na rede
       await connection.confirmTransaction(signature, "confirmed");
-      alert("✅ Saque concluído com sucesso! O dinheiro já está na sua carteira.");
-      
-      // Atualiza a tela
+      alert("✅ Saque concluído com sucesso!");
       fetchVaultData();
 
     } catch (err: any) {
@@ -109,10 +101,53 @@ function DashboardContent() {
     }
   };
 
+  // ==========================================
+  // MODO DEUS: SIMULADOR DE RENDIMENTO (Para o Pitch)
+  // ==========================================
+  const handleInjectYield = async () => {
+    if (!publicKey || !wallet) return;
+
+    try {
+      const provider = new anchor.AnchorProvider(connection, (window as any).solana, { commitment: "confirmed" });
+      const program = new anchor.Program(frenzyIdl as any, provider);
+
+      const [vaultPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("frenzy_state"), publicKey.toBuffer()],
+        PROGRAM_ID
+      );
+
+      // Vamos injetar 0.2 SOL totais (0.05 na segurança, 0.15 na agressividade)
+      const safeYield = new anchor.BN(0.05 * 1_000_000_000);
+      const chaosYield = new anchor.BN(0.15 * 1_000_000_000);
+
+      const tx = await program.methods
+        .injectMockYield(safeYield, chaosYield)
+        .accounts({
+          admin: publicKey,
+          vaultState: vaultPda,
+          systemProgram: SystemProgram.programId,
+        })
+        .transaction();
+
+      const { blockhash } = await connection.getLatestBlockhash();
+      tx.recentBlockhash = blockhash;
+      tx.feePayer = publicKey;
+
+      const signature = await sendTransaction(tx, connection);
+      alert(`⏳ Oráculo simulando 30 dias de mercado... Assinatura: ${signature}`);
+
+      await connection.confirmTransaction(signature, "confirmed");
+      alert("🤑 Alpha injetado com sucesso! Atualizando cofres...");
+      
+      fetchVaultData();
+    } catch (err: any) {
+      console.error("Erro ao simular rendimento:", err);
+      alert("❌ Falha na simulação: " + err.message);
+    }
+  };
+
   const safeAllocation = vaultBalance * 0.5;
   const aggressiveAllocation = vaultBalance * 0.5;
-  const mockSafeYield = (safeAllocation * 0.08).toFixed(4); 
-  const mockAggressiveYield = (aggressiveAllocation * 1.50).toFixed(4); 
 
   return (
     <div style={{ padding: "2rem", fontFamily: "sans-serif", maxWidth: "800px", margin: "0 auto", color: "white" }}>
@@ -139,7 +174,7 @@ function DashboardContent() {
                 <h1 style={{ fontSize: "3rem", margin: "10px 0", color: "white" }}>{vaultBalance.toFixed(3)} SOL</h1>
                 <p style={{ fontSize: "0.8rem", color: "#666" }}>Endereço do Cofre (PDA): {vaultPdaAddress}</p>
                 <button 
-                  onClick={handleWithdraw} // 🔥 O BOTÃO LIGADO NA FUNÇÃO 🔥
+                  onClick={handleWithdraw}
                   style={{ background: "#14F195", color: "black", padding: "10px 20px", cursor: "pointer", fontWeight: "bold", border: "none", borderRadius: "6px" }}
                 >
                   Sacar Fundos
@@ -149,17 +184,26 @@ function DashboardContent() {
               <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
                 <div style={{ border: "1px solid #3b82f6", padding: "1rem", flex: "1 1 300px", borderRadius: "12px", background: "#111" }}>
                   <h3 style={{ margin: "0 0 10px 0", color: "#3b82f6" }}>🛡️ Paz de Espírito (50%)</h3>
-                  <p>Alocação: <strong>{safeAllocation.toFixed(3)} SOL</strong></p>
+                  <p>Alocação Ativa: <strong>{safeAllocation.toFixed(3)} SOL</strong></p>
                   <p>Estratégia: Jito Liquid Staking</p>
-                  <p style={{ color: "#14F195" }}>Lucro Estimado: +{mockSafeYield} SOL</p>
                 </div>
 
                 <div style={{ border: "1px solid #ef4444", padding: "1rem", flex: "1 1 300px", borderRadius: "12px", background: "#111" }}>
                   <h3 style={{ margin: "0 0 10px 0", color: "#ef4444" }}>🔥 Aceleração Máxima (50%)</h3>
-                  <p>Alocação: <strong>{aggressiveAllocation.toFixed(3)} SOL</strong></p>
+                  <p>Alocação Ativa: <strong>{aggressiveAllocation.toFixed(3)} SOL</strong></p>
                   <p>Estratégia: Raydium HFT / Memecoins</p>
-                  <p style={{ color: "#14F195" }}>Lucro Estimado: +{mockAggressiveYield} SOL</p>
                 </div>
+              </div>
+
+              {/* MODO ADMIN: ESCONDIDO PARA USUÁRIOS COMUNS (Mas visível para você) */}
+              <div style={{ marginTop: "40px", borderTop: "1px dashed #666", paddingTop: "20px" }}>
+                <h4 style={{ color: "orange", margin: "0 0 10px 0" }}>⚙️ Área de Testes / Oráculo (Mock)</h4>
+                <button 
+                  onClick={handleInjectYield}
+                  style={{ background: "orange", color: "black", padding: "10px 20px", cursor: "pointer", fontWeight: "bold", border: "none", borderRadius: "6px" }}
+                >
+                  ⏱️ Simular 1 Mês de Rendimento (+0.2 SOL)
+                </button>
               </div>
 
             </div>
@@ -170,9 +214,6 @@ function DashboardContent() {
   );
 }
 
-// =========================================================
-// 2. A CARCAÇA BLINDADA
-// =========================================================
 export default function DashboardWrapper() {
   const endpoint = "https://api.devnet.solana.com";
   const wallets = useMemo(() => [], []);

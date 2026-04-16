@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-
+import Link from "next/link";
 // Importações dinâmicas pra não travar a hidratação
 const HeroCanvas = dynamic(() => import("./HeroCanvas"), { ssr: false });
 const VaultCanvas = dynamic(() => import("./VaultCanvas"), { ssr: false });
@@ -280,15 +280,14 @@ export default function HeroSection() {
           transition={{ duration: 0.4, ease: "easeOut", delay: 0.6 }}
           className="mt-8 md:mt-6"
         >
-          <a
+          <Link
             href="/demo"
             className="inline-block border-[4px] md:border-[6px] border-black bg-[#14F195] px-[clamp(1.8rem,6vw,4.5rem)] py-[clamp(0.9rem,1.8vw,1.3rem)] text-[clamp(1.1rem,2.8vw,1.8rem)] font-black uppercase text-black shadow-[6px_6px_0px_0px_#000] md:shadow-[8px_8px_0px_0px_#000] transition-all duration-75 hover:translate-x-[6px] hover:translate-y-[6px] md:hover:translate-x-[8px] md:hover:translate-y-[8px] hover:shadow-none active:translate-x-[6px] active:translate-y-[6px] active:shadow-none"
             style={btnStyle}
           >
             ENTER THE VAULT
-          </a>
+          </Link>
         </motion.div>
-
       </div>
     </section>
   );

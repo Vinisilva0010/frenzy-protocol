@@ -27,7 +27,6 @@ pub mod frenzy_vault {
             require!(vault.kill_switch == 0, FrenzyError::KillSwitchActive);
         }
 
-        // Transfere o SOL da carteira pro Cofre
         invoke(
             &system_instruction::transfer(
                 &ctx.accounts.user.key(),
@@ -53,18 +52,13 @@ pub mod frenzy_vault {
         Ok(())
     }
 
-   // =================================================================
-    // A NOVA FUNÇÃO: O Saque (Withdraw)
-    // =================================================================
     pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
-        // 1. Abre a porta, faz a matemática e FECHA A PORTA (O bloco solta a memória)
         {
             let mut vault = ctx.accounts.vault_state.load_mut()?;
             
             let total_balance = vault.safety_balance.checked_add(vault.chaos_balance).unwrap();
             require!(amount <= total_balance, FrenzyError::InsufficientFunds);
 
-            // Desconta 50/50 do registro matemático
             let safe_deduction = (amount as u128 * vault.safety_balance as u128 / total_balance as u128) as u64;
             let chaos_deduction = amount - safe_deduction;
 
@@ -72,7 +66,6 @@ pub mod frenzy_vault {
             vault.chaos_balance = vault.chaos_balance.checked_sub(chaos_deduction).unwrap();
         }
 
-        // 2. Agora, com a memória liberada, mexemos nos Lamports físicos!
         let vault_info = ctx.accounts.vault_state.to_account_info();
         let user_info = ctx.accounts.user.to_account_info();
         
@@ -82,11 +75,39 @@ pub mod frenzy_vault {
 
         require!(amount <= available_lamports, FrenzyError::InsufficientFunds);
 
-        // Subtrai do cofre e soma na carteira do usuário
         **vault_info.try_borrow_mut_lamports()? -= amount;
         **user_info.try_borrow_mut_lamports()? += amount;
 
         msg!("FRENZY: Saque de {} lamports liberado com sucesso.", amount);
+        Ok(())
+    }
+
+    // =================================================================
+    // A NOVA MÁGICA: O Oráculo Injetando Lucro (Mock Yield)
+    // =================================================================
+    pub fn inject_mock_yield(ctx: Context<InjectYield>, safe_yield: u64, chaos_yield: u64) -> Result<()> {
+        let total_yield = safe_yield.checked_add(chaos_yield).unwrap();
+
+        // O Admin transfere fisicamente o SOL para o cofre do usuário
+        invoke(
+            &system_instruction::transfer(
+                &ctx.accounts.admin.key(),
+                &ctx.accounts.vault_state.key(),
+                total_yield,
+            ),
+            &[
+                ctx.accounts.admin.to_account_info(),
+                ctx.accounts.vault_state.to_account_info(),
+                ctx.accounts.system_program.to_account_info(),
+            ],
+        )?;
+
+        // Registramos na matemática do cofre que ele ficou mais rico
+        let mut vault = ctx.accounts.vault_state.load_mut()?;
+        vault.safety_balance = vault.safety_balance.checked_add(safe_yield).unwrap();
+        vault.chaos_balance = vault.chaos_balance.checked_add(chaos_yield).unwrap();
+
+        msg!("FRENZY ORACLE: Rendimento injetado! Safe: +{}, Chaos: +{}", safe_yield, chaos_yield);
         Ok(())
     }
 
@@ -127,15 +148,10 @@ pub struct Deposit<'info> {
     pub system_program: Program<'info, System>,
 }
 
-// ==========================================
-// NOVA ROTA: Autorização de Saque
-// ==========================================
 #[derive(Accounts)]
 pub struct Withdraw<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
-    
-    // O cofre dele tem que bater com a carteira, e nós passamos o "bump" para validar a assinatura da PDA
     #[account(
         mut,
         seeds = [b"frenzy_state", user.key().as_ref()],
@@ -144,16 +160,23 @@ pub struct Withdraw<'info> {
     pub vault_state: AccountLoader<'info, VaultState>,
 }
 
+// NOVA ROTA: Rota de injeção de rendimento
+#[derive(Accounts)]
+pub struct InjectYield<'info> {
+    #[account(mut)]
+    pub admin: Signer<'info>, // Você, injetando os fundos de teste
+    
+    #[account(mut)]
+    pub vault_state: AccountLoader<'info, VaultState>, // O cofre do usuário que vai receber o lucro
+    pub system_program: Program<'info, System>,
+}
+
 #[derive(Accounts)]
 pub struct TriggerKillSwitch<'info> {
     pub authority: Signer<'info>, 
     #[account(mut, has_one = authority)]
     pub vault_state: AccountLoader<'info, VaultState>,
 }
-
-// ==========================================
-// ESTADO E ERROS
-// ==========================================
 
 #[account(zero_copy)]
 #[repr(C)]
@@ -170,6 +193,6 @@ pub struct VaultState {
 pub enum FrenzyError {
     #[msg("Acesso Negado: O Kill-Switch foi ativado.")]
     KillSwitchActive,
-    #[msg("Saldo Insuficiente: Você tentou sacar mais do que possui no cofre.")] // NOVO ERRO AQUI
+    #[msg("Saldo Insuficiente: Você tentou sacar mais do que possui no cofre.")]
     InsufficientFunds,
 }

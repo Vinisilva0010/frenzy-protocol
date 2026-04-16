@@ -55,6 +55,14 @@ export default function DemoPage() {
             <h1 className="text-[#14F195] text-3xl font-black mb-6 uppercase tracking-widest text-center drop-shadow-md">
               FRENZY Protocol Live Demo
             </h1>
+            <div className="mt-10 flex justify-center">
+          <a
+            href="/dashboard"
+            className="inline-block bg-[#14F195] text-black font-black uppercase px-8 py-4 border-[3px] border-black shadow-[4px_4px_0px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#000] transition-all"
+          >
+            Ir para o Dashboard
+          </a>
+        </div>
             
             {/* Caixa de contenção para garantir que o Card não seja esmagado */}
             <div className="w-full max-w-lg bg-white/5 p-6 rounded-2xl border border-[#14F195]/20 shadow-[0_0_30px_rgba(20,241,149,0.1)] flex flex-col items-center">
