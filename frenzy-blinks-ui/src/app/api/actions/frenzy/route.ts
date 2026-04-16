@@ -111,6 +111,7 @@ export const POST = async (req: Request) => {
       .accounts({
         user: account,
         vaultState: vaultPda,
+        systemProgram: SystemProgram.programId,
       })
       .instruction();
 

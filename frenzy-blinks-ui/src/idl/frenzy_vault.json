@@ -9,9 +9,6 @@
   "instructions": [
     {
       "name": "initialize",
-      "docs": [
-        "Inicializa o cofre principal da operação"
-      ],
       "discriminator": [
         175,
         175,
@@ -71,9 +68,6 @@
     },
     {
       "name": "split_deposit",
-      "docs": [
-        "O usuário deposita USDC. O contrato corta brutalmente em 50/50."
-      ],
       "discriminator": [
         32,
         221,
@@ -93,6 +87,10 @@
         {
           "name": "vault_state",
           "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -104,9 +102,6 @@
     },
     {
       "name": "trigger_kill_switch",
-      "docs": [
-        "O botão de pânico. Pode ser chamado pelo Backend (PDA) se o mercado derreter."
-      ],
       "discriminator": [
         71,
         172,
