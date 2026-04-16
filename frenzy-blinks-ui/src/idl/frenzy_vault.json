@@ -126,6 +126,61 @@
         }
       ],
       "args": []
+    },
+    {
+      "name": "withdraw",
+      "discriminator": [
+        183,
+        18,
+        70,
+        156,
+        148,
+        109,
+        161,
+        34
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "vault_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  101,
+                  110,
+                  122,
+                  121,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -147,7 +202,12 @@
     {
       "code": 6000,
       "name": "KillSwitchActive",
-      "msg": "Acesso Negado: O Kill-Switch foi ativado. Operações suspensas para proteção de patrimônio."
+      "msg": "Acesso Negado: O Kill-Switch foi ativado."
+    },
+    {
+      "code": 6001,
+      "name": "InsufficientFunds",
+      "msg": "Saldo Insuficiente: Você tentou sacar mais do que possui no cofre."
     }
   ],
   "types": [
