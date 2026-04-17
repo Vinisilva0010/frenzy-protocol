@@ -134,12 +134,13 @@ export default function DemoPage() {
           {/* Pista de Scroll (3 Telas de Altura) - Sem o overflow-x-hidden que quebrava o sticky */}
           <section 
             ref={containerRef} 
-            className="relative h-[300vh] w-full bg-[#f4f4f0] font-sans border-y-[12px] border-black clip-path-bounds"
+            className="relative h-[300vh] w-full bg-[#111111] font-sans border-y-[12px] border-[#14F195] clip-path-bounds"
           >
+            {/* Grid de pontilhados agora em cinza escuro para dar profundidade sem brigar com o celular */}
             <div 
-              className="absolute inset-0 z-0 opacity-10 pointer-events-none"
+              className="absolute inset-0 z-0 opacity-40 pointer-events-none"
               style={{
-                backgroundImage: "radial-gradient(#000 2px, transparent 2px)",
+                backgroundImage: "radial-gradient(#333333 2px, transparent 2px)",
                 backgroundSize: "24px 24px"
               }}
             />

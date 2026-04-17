@@ -9,6 +9,7 @@ import FaqSection from '@/components/FaqSection'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import SecuritySection from '@/components/SecuritySection'
+import Demo from '@/components/Demo'
 export default function Home() {
   return (
     <>
@@ -17,11 +18,13 @@ export default function Home() {
       <HeroCanvas />
       <VaultCanvas />
       <DividerTape />
+      <Demo />
+      <DividerTape />
       <VideoPanel />
       <SecuritySection />
        <DividerTape />
-      <BlinkSection />
-      <DividerTape />
+      
+      
       <ArchitectureCarousel />
       <FaqSection />
       <Footer />
