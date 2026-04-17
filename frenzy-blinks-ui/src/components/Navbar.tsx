@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
-  { name: "EXECUTION", href: "#blink" },
-  { name: "BRIEFING", href: "#video" },
-  { name: "TECH STACK", href: "#tech" },
-  { name: "ENGINE", href: "#engine" },
-  { name: "INTEL", href: "#faq" },
+  { name: "MANIFESTO", href: "/" },
+  { name: "ENTER VAULT", href: "/demo" },
+  { name: "PORTFOLIO", href: "/dashboard" },
+  { name: "GLOBAL STATS", href: "/analytics" },
 ];
 
 export default function Navbar() {
