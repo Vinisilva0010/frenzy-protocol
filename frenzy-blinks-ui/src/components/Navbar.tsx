@@ -8,6 +8,8 @@ const NAV_LINKS = [
   { name: "ENTER VAULT", href: "/demo" },
   { name: "PORTFOLIO", href: "/dashboard" },
   { name: "GLOBAL STATS", href: "/analytics" },
+  { name: "SECURITY", href: "/securitySection" },
+  { name: "Conservative performance/Returns", href: "/whitepaper" },
 ];
 
 export default function Navbar() {

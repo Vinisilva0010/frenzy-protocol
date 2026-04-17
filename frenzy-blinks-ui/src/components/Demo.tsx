@@ -240,7 +240,41 @@ export default function DemoPage() {
                   </a>
                 </div>
 
+                
+
               </div>
+              {/* ========================================== */}
+{/* PAINEL DE BOTÕES DOS DEEP DIVES            */}
+{/* ========================================== */}
+<div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full max-w-4xl mx-auto my-8 px-4">
+  
+  {/* BOTÃO 1: 50% DEEP SAFETY (A Fundação de Aço) */}
+  <a 
+    href="/whitepaper" 
+    className="w-full md:w-1/2 bg-[#00E1FD] text-black border-[6px] border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_#000] active:translate-y-2 active:translate-x-2 active:shadow-none transition-all flex flex-col items-center justify-center text-center group"
+  >
+    <span className="text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>
+      DEEP SAFETY DEEP DIVE
+    </span>
+    <span className="text-black font-mono font-bold text-[10px] md:text-xs mt-1 border-t-2 border-black pt-1 w-3/4 group-hover:w-full transition-all duration-300">
+      READ THE 50% SHIELD THESIS
+    </span>
+  </a>
+
+  {/* BOTÃO 2: 50% MAX ALPHA (O próximo que vamos fazer) */}
+  <a 
+    href="/alpha" 
+    className="w-full md:w-1/2 bg-[#FF3366] text-black border-[6px] border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_#000] active:translate-y-2 active:translate-x-2 active:shadow-none transition-all flex flex-col items-center justify-center text-center group"
+  >
+    <span className="text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>
+      MAX ALPHA DEEP DIVE
+    </span>
+    <span className="text-black font-mono font-bold text-[10px] md:text-xs mt-1 border-t-2 border-black pt-1 w-3/4 group-hover:w-full transition-all duration-300">
+      READ THE 50% TRENCH THESIS
+    </span>
+  </a>
+
+</div>
 
             </div>
           </section>
