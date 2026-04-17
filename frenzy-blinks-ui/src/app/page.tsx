@@ -10,6 +10,7 @@ import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import SecuritySection from '@/components/SecuritySection'
 import Demo from '@/components/Demo'
+import Analytics from '@/components/Analytics'
 export default function Home() {
   return (
     <>
@@ -21,6 +22,7 @@ export default function Home() {
       <Demo />
       <DividerTape />
       <VideoPanel />
+      <Analytics />
       <SecuritySection />
        <DividerTape />
       
