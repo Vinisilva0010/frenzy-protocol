@@ -244,35 +244,37 @@ export default function DemoPage() {
 
               </div>
               {/* ========================================== */}
-{/* PAINEL DE BOTÕES DOS DEEP DIVES            */}
+{/* PAINEL DE BOTÕES DE LEITURA (MARKETING DIRETO) */}
 {/* ========================================== */}
-<div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full max-w-4xl mx-auto my-8 px-4">
+<div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full max-w-5xl mx-auto my-8 px-4">
   
-  {/* BOTÃO 1: 50% DEEP SAFETY (A Fundação de Aço) */}
+  {/* BOTÃO 1: 50% CONSERVADOR */}
   <a 
     href="/whitepaper" 
     className="w-full md:w-1/2 bg-[#00E1FD] text-black border-[6px] border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_#000] active:translate-y-2 active:translate-x-2 active:shadow-none transition-all flex flex-col items-center justify-center text-center group"
   >
     <span className="text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>
-      DEEP SAFETY DEEP DIVE
+      THE CONSERVATIVE 50%
     </span>
-    <span className="text-black font-mono font-bold text-[10px] md:text-xs mt-1 border-t-2 border-black pt-1 w-3/4 group-hover:w-full transition-all duration-300">
-      READ THE 50% SHIELD THESIS
+    <span className="text-black font-mono font-black text-[10px] md:text-xs mt-2 border-t-[3px] border-black pt-2 w-full uppercase tracking-widest">
+      SEE WHERE IT GOES // 7% TO 10% APY + FUTURE UPDATES
     </span>
   </a>
 
-  {/* BOTÃO 2: 50% MAX ALPHA (O próximo que vamos fazer) */}
+  {/* BOTÃO 2: 50% AGRESSIVO */}
   <a 
     href="/alpha" 
     className="w-full md:w-1/2 bg-[#FF3366] text-black border-[6px] border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_#000] active:translate-y-2 active:translate-x-2 active:shadow-none transition-all flex flex-col items-center justify-center text-center group"
   >
     <span className="text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>
-      MAX ALPHA DEEP DIVE
+      THE AGGRESSIVE 50%
     </span>
-    <span className="text-black font-mono font-bold text-[10px] md:text-xs mt-1 border-t-2 border-black pt-1 w-3/4 group-hover:w-full transition-all duration-300">
-      READ THE 50% TRENCH THESIS
+    <span className="text-black font-mono font-black text-[10px] md:text-xs mt-2 border-t-[3px] border-black pt-2 w-full uppercase tracking-widest">
+      SEE THE HIGH-RISK TRENCHES // MAXIMUM YIELD POTENTIAL
     </span>
   </a>
+
+
 
 </div>
 

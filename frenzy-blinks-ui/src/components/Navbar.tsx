@@ -4,12 +4,11 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
-  { name: "MANIFESTO", href: "/" },
+  
   { name: "ENTER VAULT", href: "/demo" },
   { name: "PORTFOLIO", href: "/dashboard" },
   { name: "GLOBAL STATS", href: "/analytics" },
-  { name: "SECURITY", href: "/securitySection" },
-  { name: "Conservative performance/Returns", href: "/whitepaper" },
+  
 ];
 
 export default function Navbar() {
@@ -63,6 +62,13 @@ export default function Navbar() {
           <div className="flex items-center gap-4 ml-4">
             <a 
               href="/docs" 
+              className="bg-white border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+            >
+              CONSERVATIVE
+               YIELD
+            </a>
+            <a 
+              href="/whitepaper" 
               className="bg-white border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
             >
               DOCS
