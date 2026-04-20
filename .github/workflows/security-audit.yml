@@ -20,7 +20,7 @@ jobs:
       - name: Setup Rust Toolchain
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: "1.79.0"
+          toolchain: "1.85.0"
           components: rustfmt, clippy
           
       - name: Cache Cargo
@@ -30,9 +30,9 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             ./frenzy-contracts/target
-          key: ${{ runner.os }}-cargo-1.79-${{ hashFiles('**/Cargo.toml') }}
+          key: ${{ runner.os }}-cargo-1.85-${{ hashFiles('**/Cargo.toml') }}
           restore-keys: |
-            ${{ runner.os }}-cargo-1.79-
+            ${{ runner.os }}-cargo-1.85-
             
       - name: Install Solana CLI v2.x
         run: |
