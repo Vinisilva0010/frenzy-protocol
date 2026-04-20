@@ -171,8 +171,8 @@ export default function HeroSection() {
           <Image
             src="/char-left.png"
             alt=""
-            width={420}
-            height={520}
+            width={720}
+            height={620}
             className="w-full h-auto object-contain drop-shadow-[8px_0px_0px_#14F195]"
             priority
             sizes="(max-width: 768px) 40vw, 20vw"
@@ -206,11 +206,11 @@ export default function HeroSection() {
           <Image
             src="/char-right.png"
             alt=""
-            width={420}
-            height={520}
+            width={490}
+            height={720}
             className="w-full h-auto object-contain drop-shadow-[-8px_0px_0px_#9945FF]"
             priority
-            sizes="(max-width: 768px) 40vw, 20vw"
+            sizes="(max-width: 790px) 40vw, 20vw"
           />
         </motion.div>
       </motion.div>
