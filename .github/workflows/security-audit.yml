@@ -39,13 +39,9 @@ jobs:
         working-directory: ./frenzy-contracts
 
       - name: Run Static Security Analysis
-        run: |
-          export PATH="/home/runner/.local/share/solana/install/active_release/bin:/home/runner/.avm/bin:$PATH"
-          cargo clippy --all-targets
+        run: cargo clippy --all-targets
         working-directory: ./frenzy-contracts
 
       - name: Run Adversarial Test Suite
-        run: |
-          export PATH="/home/runner/.local/share/solana/install/active_release/bin:/home/runner/.avm/bin:$PATH"
-          anchor test
+        run: anchor test
         working-directory: ./frenzy-contracts
