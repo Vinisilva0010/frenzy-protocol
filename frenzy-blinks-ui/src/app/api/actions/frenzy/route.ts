@@ -15,6 +15,7 @@ import {
   SystemProgram,
   VersionedTransaction,
   TransactionMessage,
+  SYSVAR_CLOCK_PUBKEY,
 } from "@solana/web3.js";
 
 // ==========================================
@@ -158,6 +159,7 @@ export const POST = async (req: Request) => {
         user: account,
         vaultState: vaultPda,
         systemProgram: SystemProgram.programId,
+        clock: SYSVAR_CLOCK_PUBKEY,
       })
       .instruction();
 

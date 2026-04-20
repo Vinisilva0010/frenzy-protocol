@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { ConnectionProvider, WalletProvider, useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletModalProvider, WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { PublicKey, SystemProgram } from "@solana/web3.js";
+import { PublicKey, SystemProgram, SYSVAR_CLOCK_PUBKEY } from "@solana/web3.js";
 import * as anchor from "@coral-xyz/anchor";
 import { motion } from "framer-motion";
 import frenzyIdl from "@/idl/frenzy_vault.json";
@@ -69,7 +69,14 @@ function DashboardContent() {
     return () => clearInterval(interval);
   }, [publicKey, connection]);
 
-  const handleWithdraw = async () => {
+
+
+
+
+
+  // --- inicio ---
+
+ const handleWithdraw = async () => {
     if (!publicKey || !wallet) {
       alert("Conecte sua carteira primeiro!");
       return;
@@ -100,6 +107,8 @@ function DashboardContent() {
         .accounts({
           user: publicKey,
           vaultState: vaultPda,
+          systemProgram: SystemProgram.programId,
+          clock: SYSVAR_CLOCK_PUBKEY,
         })
         .transaction();
 
@@ -107,16 +116,28 @@ function DashboardContent() {
       tx.recentBlockhash = blockhash;
       tx.feePayer = publicKey;
 
+      // --- RPC X-RAY DIAGNOSTIC (WITHDRAW) ---
+      console.log("--- STARTING RPC SIMULATION (WITHDRAW) ---");
+      const simulation = await connection.simulateTransaction(tx);
+      if (simulation.value.err) {
+        console.error("RPC ERRORS:", simulation.value.err);
+        console.error("RPC LOGS:", simulation.value.logs);
+        alert("A simulação falhou! Abra o console (F12) para ver o erro exato do contrato.");
+        return; 
+      }
+      console.log("--- SIMULATION PASSED ---");
+      // --- FIM DO RAIO-X ---
+
       const signature = await sendTransaction(tx, connection);
-      alert(`🚀 Transação enviada! Assinatura: ${signature}\nAguarde alguns segundos...`);
+      alert(`Transação enviada! Assinatura: ${signature}\nAguarde alguns segundos...`);
 
       await connection.confirmTransaction(signature, "confirmed");
-      alert("✅ Saque concluído com sucesso!");
+      alert("Saque concluído com sucesso!");
       fetchVaultData();
 
     } catch (err: any) {
-      console.error("Erro no saque:", err);
-      alert("❌ Falha no saque: " + err.message);
+      console.error("Erro interno no fluxo de transação:", err);
+      alert("Erro na montagem da transação. Verifique o console.");
     }
   };
 
@@ -141,6 +162,7 @@ function DashboardContent() {
           admin: publicKey,
           vaultState: vaultPda,
           systemProgram: SystemProgram.programId,
+          clock: SYSVAR_CLOCK_PUBKEY,
         })
         .transaction();
 
@@ -148,18 +170,34 @@ function DashboardContent() {
       tx.recentBlockhash = blockhash;
       tx.feePayer = publicKey;
 
+      // --- RPC X-RAY DIAGNOSTIC (YIELD) ---
+      console.log("--- STARTING RPC SIMULATION (YIELD) ---");
+      const simulation = await connection.simulateTransaction(tx);
+      if (simulation.value.err) {
+        console.error("RPC ERRORS:", simulation.value.err);
+        console.error("RPC LOGS:", simulation.value.logs);
+        alert("A simulação falhou! Abra o console (F12) para ver o erro exato do contrato.");
+        return; 
+      }
+      console.log("--- SIMULATION PASSED ---");
+      // --- FIM DO RAIO-X ---
+
       const signature = await sendTransaction(tx, connection);
-      alert(`⏳ Oráculo simulando 30 dias de mercado... Assinatura: ${signature}`);
+      alert(`Oráculo simulando 30 dias de mercado... Assinatura: ${signature}`);
 
       await connection.confirmTransaction(signature, "confirmed");
-      alert("🤑 Alpha injetado com sucesso! Atualizando cofres...");
+      alert("Alpha injetado com sucesso! Atualizando cofres...");
       
       fetchVaultData();
     } catch (err: any) {
-      console.error("Erro ao simular rendimento:", err);
-      alert("❌ Falha na simulação: " + err.message);
+      console.error("Erro interno no fluxo de transação:", err);
+      alert("Erro na montagem da transação. Verifique o console.");
     }
   };
+
+
+
+
 
   const safeAllocation = vaultBalance * 0.5;
   const aggressiveAllocation = vaultBalance * 0.5;

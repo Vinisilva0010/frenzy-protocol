@@ -9,7 +9,7 @@ import { useBlinkSolanaWalletAdapter } from '@dialectlabs/blinks/hooks/solana';
 import { ConnectionProvider, WalletProvider, useWallet } from '@solana/wallet-adapter-react';
 import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-
+import { PublicKey, SystemProgram, SYSVAR_CLOCK_PUBKEY } from "@solana/web3.js";
 // ==========================================
 // 1. HYDRATION FIX: O Botão Blindado
 // ==========================================
