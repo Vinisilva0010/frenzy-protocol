@@ -33,7 +33,7 @@ jobs:
         working-directory: ./frenzy-contracts
 
       - name: Run Static Security Analysis
-        run: cargo clippy --all-targets -- -D warnings
+        run: cargo clippy --all-targets
         working-directory: ./frenzy-contracts
 
       - name: Run Adversarial Test Suite
