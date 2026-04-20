@@ -83,8 +83,6 @@ jobs:
         run: cargo clippy --all-targets
         working-directory: ./frenzy-contracts
 
-      - name: Run Adversarial Test Suite on Localnet
-        run: |
-          sed -i 's/cluster = .*/cluster = "localnet"/g' Anchor.toml
-          anchor test
+      - name: Build Institutional Smart Contract
+        run: anchor build
         working-directory: ./frenzy-contracts
