@@ -28,17 +28,18 @@ jobs:
           mkdir -p /home/runner/.config/solana
           /home/runner/.local/share/solana/install/active_release/bin/solana-keygen new --no-bip39-passphrase -o /home/runner/.config/solana/id.json
 
-      - name: Install Anchor CLI 1.0.0 via Official Binary
+      - name: Install AVM and Download Anchor CLI
         run: |
-          URL="https://github.com/coral-xyz/anchor/releases/download/v1.0.0/anchor-cli-x86_64-unknown-linux-gnu.tar.gz"
-          curl -L "$URL" -o anchor.tar.gz
-          tar -xzf anchor.tar.gz
-          sudo mv anchor-cli-x86_64-unknown-linux-gnu/anchor /usr/local/bin/
-          sudo chmod +x /usr/local/bin/anchor
-          anchor --version
+          cargo install --git https://github.com/solana-foundation/anchor avm --locked --force
+          avm install 1.0.0
+          avm use 1.0.0
+          echo "/home/runner/.avm/bin" >> $GITHUB_PATH
 
-      - name: Install Node Dependencies
-        run: npm install
+      - name: Fix Lockfile and Install Node Dependencies
+        run: |
+          rm -f Cargo.lock
+          cargo generate-lockfile
+          npm install
         working-directory: ./frenzy-contracts
 
       - name: Run Static Security Analysis
