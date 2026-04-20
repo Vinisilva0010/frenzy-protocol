@@ -84,5 +84,5 @@ jobs:
         working-directory: ./frenzy-contracts
 
       - name: Build Institutional Smart Contract
-        run: anchor build
+        run: anchor build --ignore-keys
         working-directory: ./frenzy-contracts
