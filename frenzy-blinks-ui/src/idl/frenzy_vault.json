@@ -152,11 +152,9 @@
       ],
       "accounts": [
         {
-          "name": "authority",
-          "signer": true,
-          "relations": [
-            "vault_state"
-          ]
+          "name": "admin",
+          "writable": true,
+          "signer": true
         },
         {
           "name": "vault_state",
@@ -240,12 +238,22 @@
     {
       "code": 6000,
       "name": "KillSwitchActive",
-      "msg": "Acesso Negado: O Kill-Switch foi ativado."
+      "msg": "Acesso Negado: O Kill-Switch foi ativado e o protocolo está trancado."
     },
     {
       "code": 6001,
       "name": "InsufficientFunds",
-      "msg": "Saldo Insuficiente: Você tentou sacar mais do que possui no cofre."
+      "msg": "Saldo Insuficiente: Tentativa de saque maior que o saldo disponível."
+    },
+    {
+      "code": 6002,
+      "name": "UnauthorizedAccess",
+      "msg": "Violação de Segurança: A assinatura não corresponde ao dono do cofre."
+    },
+    {
+      "code": 6003,
+      "name": "UnauthorizedOracle",
+      "msg": "Violação de Oráculo: Apenas o Administrador Mestre pode executar esta ação."
     }
   ],
   "types": [

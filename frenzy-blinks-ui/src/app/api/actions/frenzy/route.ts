@@ -18,32 +18,58 @@ import {
 } from "@solana/web3.js";
 
 // ==========================================
-// 1. O PORTEIRO (CORS)
+// 0. RATE LIMITER MEMORY STORE
+// ==========================================
+const rateLimitMap = new Map<string, { count: number; lastReset: number }>();
+
+// ==========================================
+// 1. CORS PREFLIGHT
 // ==========================================
 export const OPTIONS = async () => {
   return new Response(null, { headers: ACTIONS_CORS_HEADERS });
 };
 
 // ==========================================
-// 2. A VITRINE COM INPUT LIVRE
+// 2. METADATA ENDPOINT (GET)
 // ==========================================
 export const GET = async (req: Request) => {
+  // --- SHIELD INITIALIZATION ---
+  const ip = req.headers.get("x-forwarded-for") || "unknown_ip";
+  const now = Date.now();
+  
+  const client = rateLimitMap.get(ip) || { count: 0, lastReset: now };
+  
+  if (now - client.lastReset > 60000) {
+    client.count = 1;
+    client.lastReset = now;
+  } else {
+    client.count++;
+  }
+  rateLimitMap.set(ip, client);
+
+  if (client.count > 30) {
+    return new Response('{"error":"Rate limit exceeded. Too many requests."}', {
+      status: 429,
+      headers: ACTIONS_CORS_HEADERS,
+    });
+  }
+  // --- END SHIELD ---
+
   const payload: ActionGetResponse = {
     title: "FRENZY Protocol",
     icon: "https://ucarecdn.com/7aa46c85-08a4-4bc7-9376-88ec48bb1f43/-/preview/880x864/-/quality/smart/-/format/auto/", 
-    description: "Defina sua estratégia HFT. Digite o valor que deseja depositar no cofre e deixe o protocolo dividir seu risco.",
-    label: "Depositar", // Label padrão do botão
+    description: "Define your HFT strategy. Enter the amount to deposit and let the protocol split your risk.",
+    label: "Deposit", 
     links: {
       actions: [
         {
           type: "transaction",
-          label: "Confirmar Depósito", // Texto dentro do botão
-          // O {amount} entre chaves indica que é um parâmetro vindo do input
+          label: "Confirm Deposit", 
           href: "/api/actions/frenzy?amount={amount}",
           parameters: [
             {
-              name: "amount", // Nome da variável que o POST vai ler
-              label: "Valor em SOL (ex: 0.5, 2, 10)", // Placeholder no campo
+              name: "amount",
+              label: "Amount in SOL (e.g., 0.5, 2, 10)",
               required: true,
             },
           ],
@@ -56,9 +82,31 @@ export const GET = async (req: Request) => {
 };
 
 // ==========================================
-// 3. O MOTOR (Processa o valor digitado)
+// 3. TRANSACTION ENGINE (POST)
 // ==========================================
 export const POST = async (req: Request) => {
+  // --- SHIELD INITIALIZATION ---
+  const ip = req.headers.get("x-forwarded-for") || "unknown_ip";
+  const now = Date.now();
+  
+  const client = rateLimitMap.get(ip) || { count: 0, lastReset: now };
+  
+  if (now - client.lastReset > 60000) {
+    client.count = 1;
+    client.lastReset = now;
+  } else {
+    client.count++;
+  }
+  rateLimitMap.set(ip, client);
+
+  if (client.count > 30) {
+    return new Response('{"error":"Rate limit exceeded. Too many requests."}', {
+      status: 429,
+      headers: ACTIONS_CORS_HEADERS,
+    });
+  }
+  // --- END SHIELD ---
+
   try {
     const body: ActionPostRequest = await req.json();
     let account: PublicKey;
@@ -66,16 +114,14 @@ export const POST = async (req: Request) => {
     try {
       account = new PublicKey(body.account);
     } catch (err) {
-      return Response.json({ error: "Conta inválida" }, { status: 400, headers: ACTIONS_CORS_HEADERS });
+      return Response.json({ error: "Invalid account structure" }, { status: 400, headers: ACTIONS_CORS_HEADERS });
     }
 
-    // O Next.js/Blinks injeta o valor digitado no searchParams automaticamente
     const url = new URL(req.url);
     const amount = Number(url.searchParams.get("amount"));
 
-    // Validação básica de segurança
     if (!amount || amount <= 0) {
-      return Response.json({ error: "Valor inválido" }, { status: 400, headers: ACTIONS_CORS_HEADERS });
+      return Response.json({ error: "Invalid amount value" }, { status: 400, headers: ACTIONS_CORS_HEADERS });
     }
 
     const lamports = new anchor.BN(amount * 1_000_000_000);
@@ -131,14 +177,14 @@ export const POST = async (req: Request) => {
       fields: {
         type: "transaction",
         transaction: tx,
-        message: `Sucesso! Enviando ${amount} SOL para o FRENZY Protocol.`,
+        message: `Success. Routing ${amount} SOL to FRENZY Protocol Vaults.`,
       },
     });
 
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
 
   } catch (err) {
-    console.error("Erro no POST:", err);
-    return Response.json({ error: "Falha na transação" }, { status: 500, headers: ACTIONS_CORS_HEADERS });
+    console.error("POST Engine Error:", err);
+    return Response.json({ error: "Transaction assembly failed" }, { status: 500, headers: ACTIONS_CORS_HEADERS });
   }
 };

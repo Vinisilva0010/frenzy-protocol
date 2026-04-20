@@ -1,47 +1,98 @@
-# FRENZY Protocol - Colosseum 2026
-MASTER BLUEPRINT V2: FRENZY PROTOCOL
-"Self-Directed Risk-Split Execution Vault com Transparência Extrema"
+# FRENZY Protocol
 
-Nós somos uma infraestrutura on-chain (um toolkit) que permite ao usuário dividir seu risco de forma autônoma e segura direto do X (Twitter), protegido contra MEV e auxiliado por uma IA que atua apenas como camada de sinal.
+**Autonomous Hybrid Risk Management Vault on Solana**
 
-FASE 1: O COFRE (Anchor 1.0) - A Matemática é a Lei
-Onde a gente trava o capital e cria as regras imutáveis que não dependem do seu Qwen 3.6.
+An open-source vault that mathematically splits investor capital 50/50:  
+**50% Shield** — Predictable yield + capital protection  
+**50% High-Performance Engine** — Exponential opportunity capture  
 
-Passo 1.1: Estrutura do Vault (zero_copy). Criar o estado do cofre. Ele terá duas "gavetas" lógicas: a Safety Sleeve (Gaveta Segura) e a Chaos Sleeve (Gaveta do Caos).
+Built for users who refuse the "all-or-nothing" approach in DeFi.
 
-Passo 1.2: A Gaveta Segura (Integração Kamino). 50% de cada depósito feito pelo Blink vai automaticamente e imediatamente para um cofre de rendimento passivo e seguro de USDC na Kamino Finance (stablecoin, baixo risco).
+---
 
-Passo 1.3: A Gaveta do Caos (A PDA de Execução). Os outros 50% ficam destravados, permitindo que a nossa Program Derived Address (PDA) assine transações de swap via Jupiter.
+## Core Architecture
 
-Passo 1.4: Guardrails (Travas de Segurança Hardcoded). É isso que salva o projeto de ser uma red flag. O contrato terá limites cravados em pedra:
+### The 50% Shield (Protection Pillar)
+- Automatically stakes SOL with top-tier validators (Jito & Sanctum) via liquid staking
+- Targets historical 7-9% APY with daily yield accrual
+- Full on-chain liquidity — withdraw anytime without permission
+- Future roadmap: expansion into RWAs (tokenized T-Bills and Brazilian fixed income via Selic/Ibovespa)
 
-Max Daily Loss: Se a gaveta do caos perder mais de 10% do valor no dia, o contrato congela operações agressivas.
+### The 50% High-Performance Engine (Aggressive Pillar)
+- Provides liquidity to major Solana DEX pools (Raydium & Orca)
+- Captures trading fees in real-time
+- Designed for exponential yields during bullish or high-volatility cycles (100%–300%+ in strong market phases)
+- Risk-isolated: only 50% of capital exposed
 
-Kill-Switch: Uma função de emergência que fecha todas as posições da Raydium e devolve tudo pra USDC se o mercado sangrar.
+### splitDeposit Instruction
+The core on-chain logic. Executes mathematical capital separation at bytecode level in a single transaction. No manual intervention. No emotional decisions.
 
-Passo 1.5: LiteSVM. Testes unitários paranoicos em memória garantindo que o Kill-Switch funciona antes de subir pra Devnet.
+### Security-First Design
+- Isolated vault per user (PDA-based Smart Wallet Architecture)
+- No global honeypots — single compromise has zero systemic risk
+- Full checked math to prevent overflows
+- Strict authority validation (`has_one = authority`)
+- Autonomous `triggerKillSwitch` for instant lockdown during extreme market anomalies or cascading liquidations
 
-FASE 2: O MOTOR DE EXECUÇÃO (Backend Rust + Qwen 3.6)
-O cão de guarda rodando na sua máquina que caça as oportunidades, mas respeita a lei do Cofre.
+---
 
-Passo 2.1: A Camada de Sinal (Qwen 3.6). Seu modelo local roda escutando o mercado. Ele analisa e cospe um sinal: "Comprar Token X".
+## Technical Stack
 
-Passo 2.2: Avaliação de Risco (Backend). O backend em Rust recebe o sinal da IA, mas antes de agir, ele verifica o Smart Contract: "Atingimos o Max Daily Loss?". Se sim, ele ignora a IA. Se não, ele avança.
+- **On-chain**: Rust + Anchor Framework (Solana)
+- **Backend**: Pure Rust + Tokio (async runtime)
+- **Low-latency Oracle**: Groq LPU hardware acceleration (< 50ms market context)
+- **Frontend & UX**: Next.js 16 + Turbopack + Solana Blinks
+- **Transaction Flow**: Base64-packed `splitDeposit` executed directly from X feed via Phantom wallet (zero friction)
 
-Passo 2.3: Roteamento Jupiter & Execução Jito. O Rust empacota a ordem da IA usando o jup-ag-sdk, assina com a autoridade da PDA do nosso Cofre e envia pela porta dos fundos do validador usando o jito-sdk-rust com a tag dontfront. MEV protection absoluta.
+---
 
-FASE 3: A PORTA DE ENTRADA (Blinks + UI C.O.S.M.O.)
-O funil de captação viral onde a estética brutalista brilha.
+## How It Works
 
-Passo 3.1: API Actions (/api/actions). A rota que processa o clique no Twitter e manda a instrução pro usuário assinar o depósito.
+1. User clicks "Enter Vault" via Blink on X
+2. `splitDeposit` instruction splits capital 50/50 on-chain
+3. Shield portion → Liquid staking (Jito/Sanctum)
+4. Aggressive portion → Liquidity provision (Raydium/Orca)
+5. Backend continuously monitors risk and triggers `killSwitch` if needed
+6. All actions fully automated and permissionless
 
-Passo 3.2: O Card Brutalista. Nada de "Deixe nosso fundo gerir seu dinheiro". A cópia vai ser: "SEPARE SEU RISCO. 50% SEGURO. 50% CAOS.". O design vai ser aquele soco na cara: outline grosso (border: 5px solid #000), botão gritante pulando na tela, elementos 2D surreais, suor e ruído digital.
+---
 
-FASE 4: O PALCO DOS JURADOS (Transparência Radical 3D)
-Onde a gente ganha o Hackathon.
+## Current Status (Hackathon Stage)
 
-Passo 4.1: O Dashboard "No-Trust". Um site Next.js/Three.js onde os VCs vão entrar e ver que nós não pedimos confiança, nós provamos.
+- Core smart contracts functional (VaultState + splitDeposit + killSwitch)
+- Backend oracle operational
+- Blink integration live
+- Frontend in final polishing
+- Full audit planned post-Colosseum submission
 
-Passo 4.2: Audit Trail. Uma tabela brutalista mostrando em tempo real: "A IA recomendou X, o Cofre executou Y, a proteção Jito economizou Z em slippage".
+**Live Site**: [https://frenzy-protocol.vercel.app](https://frenzy-protocol.vercel.app)
 
-Passo 4.3: O Vídeo de 3 Minutos. Gravamos você (fundador) explicando que resolveu a dor do degen abstraindo a infraestrutura institucional (Jito/Jupiter) e colocando limites on-chain inquebráveis.
+---
+
+## Roadmap
+
+- **v1** — Liquid staking + DEX LP hybrid vault (current)
+- **v2** — RWA integration (T-Bills + Brazilian fixed income exposure)
+- **v3** — Cross-border capital bridge (global → Brazilian economy via RWAs)
+
+---
+
+## Security & Audits
+
+- Built with institutional-grade security practices
+- PDA isolation, checked math, strict CPI validation
+- Audit by Adevar Labs planned after hackathon submission
+
+---
+
+## Contributing & Feedback
+
+We are actively looking for technical feedback from Rust, Anchor, and Solana developers.
+
+DM on X: [@frenzy_protocol](https://x.com/frenzy_protocol)
+
+Colosseum Frontier Hackathon participant — Submission May 11, 2026.
+
+---
+
+**Built with brutal execution. No hype. Infrastructure only.**

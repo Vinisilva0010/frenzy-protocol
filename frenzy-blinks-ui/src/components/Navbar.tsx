@@ -74,10 +74,10 @@ export default function Navbar() {
               DOCS
             </a>
             <a 
-              href="#contract" 
+              href="/security" 
               className="bg-[#14F195] border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
             >
-              CONTRACT
+              security 
             </a>
           </div>
         </div>
