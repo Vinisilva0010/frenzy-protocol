@@ -22,7 +22,7 @@ jobs:
 
       - name: Install Solana CLI and Generate Dummy Keypair
         run: |
-          sh -c "$(curl -sSfL https://release.solana.com/v1.18.18/install)"
+          sh -c "$(curl --retry 5 --retry-delay 3 -sSfL https://release.anza.xyz/v1.18.18/install)"
           echo "/home/runner/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
           mkdir -p /home/runner/.config/solana
           /home/runner/.local/share/solana/install/active_release/bin/solana-keygen new --no-bip39-passphrase -o /home/runner/.config/solana/id.json
