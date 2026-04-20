@@ -1,54 +1,68 @@
 name: Institutional Security Pipeline
-
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 jobs:
   audit-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v4
       - name: Install Linux Build Dependencies
-        run: sudo apt-get update && sudo apt-get install -y pkg-config build-essential libudev-dev llvm libclang-dev protobuf-compiler libssl-dev
-
-      - name: Setup Rust Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
-
-      - name: Install Solana CLI and Generate Dummy Keypair
         run: |
-          sh -c "$(curl --retry 5 --retry-delay 3 -sSfL https://release.anza.xyz/v1.18.18/install)"
+          sudo apt-get update
+          sudo apt-get install -y \
+            pkg-config build-essential libudev-dev \
+            llvm libclang-dev protobuf-compiler libssl-dev
+      
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.79.0"
+          components: rustfmt, clippy
+          
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ./frenzy-contracts/target
+          key: ${{ runner.os }}-cargo-1.79-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-1.79-
+            
+      - name: Install Solana CLI v2.x
+        run: |
+          sh -c "$(curl --retry 5 --retry-delay 3 -sSfL https://release.anza.xyz/v2.0.21/install)"
           echo "/home/runner/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
           mkdir -p /home/runner/.config/solana
-          /home/runner/.local/share/solana/install/active_release/bin/solana-keygen new --no-bip39-passphrase -o /home/runner/.config/solana/id.json
-
-      - name: Install Anchor AVM and Pin Version
+          /home/runner/.local/share/solana/install/active_release/bin/solana-keygen new \
+            --no-bip39-passphrase \
+            -o /home/runner/.config/solana/id.json
+            
+      - name: Install Anchor CLI 1.0.0
         run: |
-          cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
-          avm install 0.29.0
-          avm use 0.29.0
-          echo "/home/runner/.avm/bin" >> $GITHUB_PATH
-
+          cargo install --git https://github.com/coral-xyz/anchor \
+            --tag v1.0.0 anchor-cli --locked --force
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          
+      - name: Regenerar Cargo.lock limpo
+        run: |
+          rm -f Cargo.lock
+          cargo generate-lockfile
+        working-directory: ./frenzy-contracts
+        
       - name: Install Node Dependencies
         run: npm install
         working-directory: ./frenzy-contracts
-
-      - name: Fix Lockfile Version Mismatch
-        run: rm -f Cargo.lock && cargo generate-lockfile
-        working-directory: ./frenzy-contracts
-
+        
       - name: Run Static Security Analysis
         run: cargo clippy --all-targets
         working-directory: ./frenzy-contracts
-
+        
       - name: Run Adversarial Test Suite
         run: anchor test
         working-directory: ./frenzy-contracts
