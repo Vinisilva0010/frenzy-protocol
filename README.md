@@ -91,7 +91,11 @@ We are actively looking for technical feedback from Rust, Anchor, and Solana dev
 
 DM on X: [@frenzy_protocol](https://x.com/frenzy_protocol)
 
+<<<<<<< HEAD
 Colosseum Frontier Hackathon participant — Submission May 11, 2026.
+=======
+Colosseum Frontier Hackathon participant — Submission May 9, 2026.
+>>>>>>> d15c54afc095f239df3643d90c1c239b098f154a
 
 ---
 
