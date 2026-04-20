@@ -41,6 +41,10 @@ jobs:
         run: npm install
         working-directory: ./frenzy-contracts
 
+      - name: Fix Lockfile Version Mismatch
+        run: rm -f Cargo.lock && cargo generate-lockfile
+        working-directory: ./frenzy-contracts
+
       - name: Run Static Security Analysis
         run: cargo clippy --all-targets
         working-directory: ./frenzy-contracts
