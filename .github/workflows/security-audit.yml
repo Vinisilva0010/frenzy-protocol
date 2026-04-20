@@ -14,32 +14,69 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Linux Build Dependencies
-        run: sudo apt-get update && sudo apt-get install -y pkg-config libssl-dev libudev-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config build-essential libudev-dev llvm libclang-dev protobuf-compiler libssl-dev
 
       - name: Setup Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
 
-      - name: Install Solana CLI
+      - name: Cache Cargo Registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+
+      - name: Cache Solana Platform Tools (SBF)
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/solana
+          key: ${{ runner.os }}-solana-platform-tools-v2.0.21
+          restore-keys: |
+            ${{ runner.os }}-solana-platform-tools-
+
+      - name: Install Solana CLI v2.0.21
         run: |
-          sh -c "$(curl --retry 5 --retry-delay 3 -sSfL https://release.anza.xyz/v1.18.18/install)"
+          sh -c "$(curl --retry 5 --retry-delay 3 -sSfL https://release.anza.xyz/v2.0.21/install)"
           echo "/home/runner/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+
+      - name: Generate Dummy Keypair
+        run: |
           mkdir -p /home/runner/.config/solana
           /home/runner/.local/share/solana/install/active_release/bin/solana-keygen new --no-bip39-passphrase -o /home/runner/.config/solana/id.json
 
-      - name: Install AVM and Download Anchor CLI
+      - name: Install AVM and Anchor CLI 1.0.0
         run: |
           cargo install --git https://github.com/solana-foundation/anchor avm --locked --force
           avm install 1.0.0
           avm use 1.0.0
           echo "/home/runner/.avm/bin" >> $GITHUB_PATH
 
-      - name: Fix Lockfile and Install Node Dependencies
+      - name: Verify Installed Versions
+        run: |
+          rustc --version
+          cargo --version
+          solana --version
+          anchor --version
+
+      - name: Fix Lockfile
         run: |
           rm -f Cargo.lock
           cargo generate-lockfile
-          npm install
+        working-directory: ./frenzy-contracts
+
+      - name: Install Node Dependencies
+        run: npm install
+        working-directory: ./frenzy-contracts
+
+      - name: Pre-download SBF Platform Tools
+        run: cargo build-sbf 2>&1 || true
         working-directory: ./frenzy-contracts
 
       - name: Run Static Security Analysis
