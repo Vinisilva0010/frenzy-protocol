@@ -202,10 +202,15 @@ export default function SecurityAuditPage() {
               <span className="ml-4 text-zinc-500 font-mono text-xs uppercase overflow-hidden text-ellipsis whitespace-nowrap">anchor test --skip-local-validator</span>
             </div>
             
-            <div className="w-full aspect-video md:aspect-[21/9] bg-black relative flex items-center justify-center p-4">
-              <div className="w-full h-full border-2 border-dashed border-zinc-700 flex flex-col items-center justify-center bg-zinc-900/50 text-center overflow-hidden">
+            {/* TIREI O ASPECT RATIO FIXO: Agora o container abraça o tamanho real da imagem */}
+            <div className="w-full bg-black relative p-2 md:p-4">
+              <div className="w-full border-2 border-dashed border-zinc-700 bg-zinc-900/50 overflow-hidden flex items-center justify-center">
                 {/* COLE SEU PRINT GERAL DOS TESTES AQUI */}
-                <img src="/img-suite1.png" alt="Test Suite Execution" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" />
+                <img 
+                  src="/img-suite1.png" 
+                  alt="Test Suite Execution" 
+                  className="w-full h-auto object-contain opacity-80 hover:opacity-100 transition-opacity" 
+                />
               </div>
             </div>
           </div>
@@ -217,7 +222,7 @@ export default function SecurityAuditPage() {
           </div>
         </motion.div>
 
-        {/* ADVANCED MODULES (OS 4 SLOTS) */}
+       {/* ADVANCED MODULES (OS 4 SLOTS) */}
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp}>
           <div className="mb-10 border-b-[6px] border-zinc-800 pb-4">
             <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter text-white" style={{ fontFamily: "var(--font-bebas)" }}>
@@ -238,7 +243,11 @@ export default function SecurityAuditPage() {
               </p>
               <div className="w-full border-[2px] border-dashed border-zinc-700 p-1 group-hover:border-[#FFE600] transition-colors bg-zinc-900 relative">
                 {/* COLE SEU PRINT DO TESTE 'frenzy_vault.ts' AQUI */}
-                <img src="/img-vault-test.png" alt="Vault Math Test Proof" className="w-full h-auto transition-transform duration-300 group-hover:scale-110 relative z-10" />
+                <img 
+                  src="/img-vault-test.png" 
+                  alt="Vault Math Test Proof" 
+                  className="w-full h-auto transition-transform duration-300 group-hover:scale-125 group-hover:-translate-y-4 relative z-10 group-hover:z-50 shadow-none group-hover:shadow-[15px_15px_0px_0px_#000]" 
+                />
               </div>
             </div>
 
@@ -252,7 +261,11 @@ export default function SecurityAuditPage() {
               </p>
               <div className="w-full border-[2px] border-dashed border-zinc-700 p-1 group-hover:border-[#FF3366] transition-colors bg-zinc-900 relative">
                 {/* COLE SEU PRINT DO TESTE 'setup.ts' AQUI */}
-                <img src="/img-setup-test.png" alt="Setup & RBAC Test Proof" className="w-full h-auto transition-transform duration-300 group-hover:scale-110 relative z-10" />
+                <img 
+                  src="/img-setup-test.png" 
+                  alt="Setup & RBAC Test Proof" 
+                  className="w-full h-auto transition-transform duration-300 group-hover:scale-125 group-hover:-translate-y-4 relative z-10 group-hover:z-50 shadow-none group-hover:shadow-[15px_15px_0px_0px_#000]" 
+                />
               </div>
             </div>
 
@@ -266,7 +279,11 @@ export default function SecurityAuditPage() {
               </p>
               <div className="w-full border-[2px] border-dashed border-zinc-700 p-1 group-hover:border-[#14F195] transition-colors bg-zinc-900 relative">
                 {/* COLE SEU PRINT DO TESTE 'handover.ts' AQUI */}
-                <img src="/img-handover-test.png" alt="Handover Test Proof" className="w-full h-auto transition-transform duration-300 group-hover:scale-110 relative z-10" />
+                <img 
+                  src="/img-handover-test.png" 
+                  alt="Handover Test Proof" 
+                  className="w-full h-auto transition-transform duration-300 group-hover:scale-125 group-hover:-translate-y-4 relative z-10 group-hover:z-50 shadow-none group-hover:shadow-[15px_15px_0px_0px_#000]" 
+                />
               </div>
             </div>
 
@@ -283,13 +300,16 @@ export default function SecurityAuditPage() {
               </p>
               <div className="w-full border-[2px] border-dashed border-zinc-700 p-1 group-hover:border-[#9945FF] transition-colors bg-zinc-900 relative">
                 {/* SUA IMAGEM DE API PODE FICAR AQUI */}
-                <img src="/api.png" alt="API Shield" className="w-full h-auto transition-transform duration-300 group-hover:scale-110 relative z-10" />
+                <img 
+                  src="/api.png" 
+                  alt="API Shield" 
+                  className="w-full h-auto transition-transform duration-300 group-hover:scale-125 group-hover:-translate-y-4 relative z-10 group-hover:z-50 shadow-none group-hover:shadow-[15px_15px_0px_0px_#000]" 
+                />
               </div>
             </div>
 
           </div>
         </motion.div>
-
       </div>
     </div>
   );

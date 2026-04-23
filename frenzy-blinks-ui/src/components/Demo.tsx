@@ -29,7 +29,7 @@ function ClientWalletButton() {
 }
 
 // ==========================================
-// 2. O MOTOR DO BLINK (Lógica Intacta)
+// 2. O MOTOR DO BLINK COM PREVIEW DE IMAGEM
 // ==========================================
 function BlinkRenderer() {
   const [mounted, setMounted] = useState(false);
@@ -38,13 +38,11 @@ function BlinkRenderer() {
   const { adapter } = useBlinkSolanaWalletAdapter('https://api.devnet.solana.com');
   const { connected } = useWallet(); 
   
-  // 🔥 A MÁGICA ENTRA AQUI: O Next.js decide o link sozinho!
   const API_URL = process.env.NODE_ENV === 'development' 
     ? 'http://localhost:3000' 
     : 'https://frenzy.zanvexis.com';
 
   const { blink, isLoading } = useBlink({ 
-    // Usando a crase (`) para juntar a variável com o resto do caminho
     url: `${API_URL}/api/actions/frenzy`
   });
 
@@ -52,13 +50,24 @@ function BlinkRenderer() {
 
   if (!connected) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-white border-[6px] border-black shadow-[inset_0_0_20px_rgba(0,0,0,0.1)]">
-        <h2 className="text-black text-2xl md:text-3xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>
+      <div className="w-full h-full flex flex-col items-center justify-start p-4 text-center bg-white border-[6px] border-black shadow-[inset_0_0_20px_rgba(0,0,0,0.1)] overflow-y-auto">
+        <h2 className="text-black text-2xl md:text-3xl font-black uppercase tracking-tighter mt-2" style={{ fontFamily: "var(--font-bebas)" }}>
           AWAITING AUTHENTICATION
         </h2>
-        <p className="text-zinc-500 font-mono text-xs md:text-sm font-bold uppercase mt-2">
+        <p className="text-zinc-500 font-mono text-[10px] md:text-sm font-bold uppercase mt-2 mb-6">
           Connect your wallet at the top to access the X-Feed Simulation.
         </p>
+
+        {/* O LOCAL DO SEU PRINT DO BLINK */}
+        <div className="w-full border-[4px] border-dashed border-zinc-300 p-2 relative opacity-70">
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+             <span className="bg-black text-white font-mono font-black text-xs md:text-sm px-3 py-2 uppercase border-[2px] border-white shadow-[4px_4px_0px_0px_#000]">
+               WALLET REQUIRED
+             </span>
+          </div>
+          {/* Lembre de salvar o seu print com este nome na pasta public */}
+          <img src="/img-blink-preview.png" alt="Blink Preview" className="w-full h-auto grayscale blur-[1px]" />
+        </div>
       </div>
     );
   }
@@ -156,77 +165,61 @@ export default function DemoPage() {
               
               {/* Header Fixo de Navegação Institucional */}
               <div className="absolute top-0 left-0 w-full p-4 md:p-8 flex justify-between items-start z-50 pointer-events-auto">
-                <div className="bg-white border-[6px] border-black p-4 shadow-[6px_6px_0px_0px_#000]">
-                  <h1 className="text-black text-2xl md:text-4xl font-black uppercase tracking-tighter leading-none" style={{ fontFamily: "var(--font-bebas)" }}>
+                <div className="bg-white border-[4px] md:border-[6px] border-black p-2 md:p-4 shadow-[4px_4px_0px_0px_#000] md:shadow-[6px_6px_0px_0px_#000]">
+                  <h1 className="text-black text-xl md:text-4xl font-black uppercase tracking-tighter leading-none" style={{ fontFamily: "var(--font-bebas)" }}>
                     FRENZY PROTOCOL
                   </h1>
-                  <p className="text-zinc-600 font-mono font-bold uppercase text-[10px] md:text-xs tracking-widest mt-1">
+                  <p className="text-zinc-600 font-mono font-bold uppercase text-[8px] md:text-xs tracking-widest mt-1">
                     Demo Environment
                   </p>
                 </div>
                 <ClientWalletButton />
               </div>
 
-              {/* O CELULAR LARANJA BRUTALISTA (MAIOR NO PC) */}
-              <div className="relative w-[340px] h-[700px] md:w-[420px] md:h-[850px] bg-[#FF6600] border-[8px] border-black rounded-[50px] p-4 flex flex-col shadow-[20px_20px_0px_0px_#000] pointer-events-auto z-20">
+              {/* O CELULAR LARANJA (Menor no mobile para caber os botões) */}
+              <div className="relative w-[300px] h-[540px] md:w-[420px] md:h-[850px] bg-[#FF6600] border-[8px] border-black rounded-[40px] md:rounded-[50px] p-3 md:p-4 flex flex-col shadow-[15px_15px_0px_0px_#000] md:shadow-[20px_20px_0px_0px_#000] pointer-events-auto z-20">
                 
                 {/* Notch Superior do Celular */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] md:w-[150px] h-[25px] md:h-[30px] bg-black rounded-b-[15px] z-30"></div>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100px] md:w-[150px] h-[20px] md:h-[30px] bg-black rounded-b-[15px] z-30"></div>
 
                 {/* TELA DO CELULAR */}
-                <div className="flex-1 bg-white border-[6px] border-black rounded-[35px] relative flex flex-col items-center justify-center mt-2">
+                <div className="flex-1 bg-white border-[4px] md:border-[6px] border-black rounded-[25px] md:rounded-[35px] relative flex flex-col items-center justify-center mt-2">
                   
                   {/* Título Central (Some ao Rolar) */}
                   <motion.div style={{ opacity: headerOpacity }} className="absolute text-center px-4 top-[10%]">
-                    <h2 className="text-black text-4xl md:text-5xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)", lineHeight: 0.9 }}>
+                    <h2 className="text-black text-3xl md:text-5xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)", lineHeight: 0.9 }}>
                       SCROLL TO<br/>UNPACK
                     </h2>
-                    <p className="text-zinc-500 font-mono text-[10px] md:text-xs uppercase font-bold mt-2">
+                    <p className="text-zinc-500 font-mono text-[9px] md:text-xs uppercase font-bold mt-2">
                       Initialize Risk Management
                     </p>
                   </motion.div>
 
                   {/* OS 4 QUADRADINHOS DE EXPLICAÇÃO */}
-                  {/* Q1: Deep Safety */}
-                  <motion.div 
-                    style={{ x: c1X, y: c1Y }} 
-                    className="absolute w-[135px] h-[135px] md:w-[160px] md:h-[160px] bg-[#14F195] border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 top-[25%] left-[5%] md:left-[10%]"
-                  >
-                    <h3 className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>DEEP SAFETY</h3>
-                    <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">50% Capital locked in institutional staking.</p>
+                  <motion.div style={{ x: c1X, y: c1Y }} className="absolute w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-[#14F195] border-[4px] md:border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 top-[25%] left-[2%] md:left-[10%]">
+                    <h3 className="text-black font-black text-lg md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>90% SAFE LAYER</h3>
+                    <p className="text-black font-mono text-[8px] md:text-[11px] font-bold uppercase leading-tight">CAPITAL-FIRST DESIGN. SENIOR TRANCHE FOCUSED ON PRESERVATION.</p>
                   </motion.div>
 
-                  {/* Q2: Max Alpha */}
-                  <motion.div 
-                    style={{ x: c2X, y: c2Y }} 
-                    className="absolute w-[135px] h-[135px] md:w-[160px] md:h-[160px] bg-[#FF3366] border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 top-[25%] right-[5%] md:right-[10%]"
-                  >
-                    <h3 className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>MAX ALPHA</h3>
-                    <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">50% Exposed to high-frequency acceleration.</p>
+                  <motion.div style={{ x: c2X, y: c2Y }} className="absolute w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-[#FF3366] border-[4px] md:border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 top-[25%] right-[2%] md:right-[10%]">
+                    <h3 className="text-black font-black text-lg md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>10% FIRST LOSS</h3>
+                    <p className="text-black font-mono text-[8px] md:text-[11px] font-bold uppercase leading-tight">HIGH-VOLTAGE UPSIDE. YOU ABSORB FIRST LOSSES FOR EXCESS YIELD.</p>
                   </motion.div>
 
-                  {/* Q3: Deterministic */}
-                  <motion.div 
-                    style={{ x: c3X, y: c3Y }} 
-                    className="absolute w-[135px] h-[135px] md:w-[160px] md:h-[160px] bg-[#00E1FD] border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 bottom-[25%] left-[5%] md:left-[10%]"
-                  >
-                    <h3 className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>IMMUTABLE</h3>
-                    <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">Rust & Anchor execution. Zero backdoors.</p>
+                  <motion.div style={{ x: c3X, y: c3Y }} className="absolute w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-[#00E1FD] border-[4px] md:border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 bottom-[25%] left-[2%] md:left-[10%]">
+                    <h3 className="text-black font-black text-lg md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>RULES ON-CHAIN</h3>
+                    <p className="text-black font-mono text-[8px] md:text-[11px] font-bold uppercase leading-tight">FIXED SPLIT. NO HIDDEN LEVERS, ONLY CODE.</p>
                   </motion.div>
 
-                  {/* Q4: Zero Friction */}
-                  <motion.div 
-                    style={{ x: c4X, y: c4Y }} 
-                    className="absolute w-[135px] h-[135px] md:w-[160px] md:h-[160px] bg-[#9945FF] border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 bottom-[25%] right-[5%] md:right-[10%]"
-                  >
-                    <h3 className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>NO FRICTION</h3>
-                    <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">Execute directly from your X social feed.</p>
+                  <motion.div style={{ x: c4X, y: c4Y }} className="absolute w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-[#9945FF] border-[4px] md:border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 bottom-[25%] right-[2%] md:right-[10%]">
+                    <h3 className="text-black font-black text-lg md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>NO FRICTION</h3>
+                    <p className="text-black font-mono text-[8px] md:text-[11px] font-bold uppercase leading-tight">Execute directly from your X social feed.</p>
                   </motion.div>
 
                   {/* O BLINK */}
                   <motion.div 
                     style={{ opacity: blinkOpacity, scale: blinkScale, pointerEvents: useTransform(blinkOpacity, v => v > 0.5 ? "auto" : "none") }}
-                    className="absolute inset-0 w-full h-full p-2 md:p-4 z-30 flex items-center justify-center bg-white rounded-[30px] overflow-hidden"
+                    className="absolute inset-0 w-full h-full p-2 md:p-4 z-30 flex items-center justify-center bg-white rounded-[20px] md:rounded-[30px] overflow-hidden"
                   >
                     <BlinkRenderer />
                   </motion.div>
@@ -234,55 +227,42 @@ export default function DemoPage() {
                 </div>
 
                 {/* O BOTÃO HOME (Retrô iPhone 6 Style) COM LINK PRO DASHBOARD */}
-                <div className="w-full h-[80px] md:h-[90px] flex flex-col items-center justify-center mt-2">
-                  <p className="text-black font-mono text-[10px] md:text-xs font-black uppercase mb-1">
+                <div className="w-full h-[60px] md:h-[90px] flex flex-col items-center justify-center mt-2">
+                  <p className="text-black font-mono text-[9px] md:text-xs font-black uppercase mb-1">
                     VIEW PORTFOLIO
                   </p>
-                  <a 
-                    href="/dashboard"
-                    className="w-[50px] h-[50px] md:w-[60px] md:h-[60px] bg-white border-[6px] border-black rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_#000] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all cursor-pointer group relative"
-                  >
-                    <div className="w-4 h-4 md:w-5 md:h-5 border-[3px] border-zinc-300 rounded-sm group-hover:border-black transition-colors"></div>
+                  <a href="/dashboard" className="w-[40px] h-[40px] md:w-[60px] md:h-[60px] bg-white border-[4px] md:border-[6px] border-black rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_#000] hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all cursor-pointer group relative">
+                    <div className="w-3 h-3 md:w-5 md:h-5 border-[2px] md:border-[3px] border-zinc-300 rounded-sm group-hover:border-black transition-colors"></div>
                   </a>
                 </div>
-              
+              </div>
+
+              {/* ========================================== */}
+              {/* BOTÕES DE MARKETING - COLADOS NO RODAPÉ    */}
+              {/* ========================================== */}
+              <div className="absolute bottom-2 md:bottom-8 left-0 w-full flex flex-row items-center justify-center gap-2 md:gap-6 px-2 md:px-4 z-50 pointer-events-auto">
                 
+                {/* BOTÃO 1: 90% CONSERVADOR */}
+                <a href="/whitepaper" className="w-1/2 max-w-[400px] bg-[#00E1FD] text-black border-[4px] md:border-[6px] border-black p-2 md:p-4 shadow-[4px_4px_0px_0px_#000] md:shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#000] transition-all flex flex-col items-center justify-center text-center group">
+                  <span className="text-xl md:text-4xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>
+                    90% CONSERVATIVE
+                  </span>
+                  <span className="hidden md:block text-black font-mono font-black text-[10px] md:text-xs mt-2 border-t-[3px] border-black pt-2 w-full uppercase tracking-widest">
+                    SEE WHERE THE SAFE SIDE WORKS
+                  </span>
+                </a>
+
+                {/* BOTÃO 2: 10% AGRESSIVO */}
+                <a href="/alpha" className="w-1/2 max-w-[400px] bg-[#FF3366] text-black border-[4px] md:border-[6px] border-black p-2 md:p-4 shadow-[4px_4px_0px_0px_#000] md:shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_#000] transition-all flex flex-col items-center justify-center text-center group">
+                  <span className="text-xl md:text-4xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>
+                    10% AGGRESSIVE
+                  </span>
+                  <span className="hidden md:block text-black font-mono font-black text-[10px] md:text-xs mt-2 border-t-[3px] border-black pt-2 w-full uppercase tracking-widest">
+                    FIRST LOSS, MAX UPSIDE.
+                  </span>
+                </a>
 
               </div>
-              {/* ========================================== */}
-{/* PAINEL DE BOTÕES DE LEITURA (MARKETING DIRETO) */}
-{/* ========================================== */}
-<div className="flex flex-col md:flex-row items-center justify-center gap-6 w-full max-w-5xl mx-auto my-8 px-4">
-  
-  {/* BOTÃO 1: 50% CONSERVADOR */}
-  <a 
-    href="/whitepaper" 
-    className="w-full md:w-1/2 bg-[#00E1FD] text-black border-[6px] border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_#000] active:translate-y-2 active:translate-x-2 active:shadow-none transition-all flex flex-col items-center justify-center text-center group"
-  >
-    <span className="text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>
-      THE CONSERVATIVE 50%
-    </span>
-    <span className="text-black font-mono font-black text-[10px] md:text-xs mt-2 border-t-[3px] border-black pt-2 w-full uppercase tracking-widest">
-      SEE WHERE IT GOES // 7% TO 10% APY + FUTURE UPDATES
-    </span>
-  </a>
-
-  {/* BOTÃO 2: 50% AGRESSIVO */}
-  <a 
-    href="/alpha" 
-    className="w-full md:w-1/2 bg-[#FF3366] text-black border-[6px] border-black p-4 shadow-[8px_8px_0px_0px_#000] hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_#000] active:translate-y-2 active:translate-x-2 active:shadow-none transition-all flex flex-col items-center justify-center text-center group"
-  >
-    <span className="text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>
-      THE AGGRESSIVE 50%
-    </span>
-    <span className="text-black font-mono font-black text-[10px] md:text-xs mt-2 border-t-[3px] border-black pt-2 w-full uppercase tracking-widest">
-      SEE THE HIGH-RISK TRENCHES // MAXIMUM YIELD POTENTIAL
-    </span>
-  </a>
-
-
-
-</div>
 
             </div>
           </section>

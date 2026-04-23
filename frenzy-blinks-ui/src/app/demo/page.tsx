@@ -185,31 +185,51 @@ export default function DemoPage() {
                   </motion.div>
 
                   {/* OS 4 QUADRADINHOS DE EXPLICAÇÃO */}
-                  {/* Q1: Deep Safety */}
+                 {/* Q1: Deep Safety */}
                   <motion.div 
                     style={{ x: c1X, y: c1Y }} 
                     className="absolute w-[135px] h-[135px] md:w-[160px] md:h-[160px] bg-[#14F195] border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 top-[25%] left-[5%] md:left-[10%]"
                   >
-                    <h3 className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>DEEP SAFETY</h3>
-                    <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">50% Capital locked in institutional staking.</p>
+                    <h3
+                      className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2"
+                      style={{ fontFamily: "var(--font-bebas)" }}
+                    >
+                      90% SAFE LAYER
+                    </h3>
+                    <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">
+                      CAPITAL-FIRST DESIGN. SENIOR TRANCHE FOCUSED ON PRESERVATION BEFORE UPSIDE.
+                    </p>
                   </motion.div>
 
                   {/* Q2: Max Alpha */}
-                  <motion.div 
-                    style={{ x: c2X, y: c2Y }} 
-                    className="absolute w-[135px] h-[135px] md:w-[160px] md:h-[160px] bg-[#FF3366] border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 top-[25%] right-[5%] md:right-[10%]"
-                  >
-                    <h3 className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>MAX ALPHA</h3>
-                    <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">50% Exposed to high-frequency acceleration.</p>
-                  </motion.div>
-
+                    <motion.div 
+                      style={{ x: c2X, y: c2Y }} 
+                      className="absolute w-[135px] h-[135px] md:w-[160px] md:h-[160px] bg-[#FF3366] border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 top-[25%] right-[5%] md:right-[10%]"
+                    >
+                      <h3
+                        className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2"
+                        style={{ fontFamily: "var(--font-bebas)" }}
+                      >
+                        10% FIRST LOSS
+                      </h3>
+                      <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">
+                        HIGH-VOLTAGE UPSIDE. YOU ABSORB FIRST LOSSES TO CAPTURE EXCESS YIELD.
+                      </p>
+                    </motion.div>
                   {/* Q3: Deterministic */}
                   <motion.div 
                     style={{ x: c3X, y: c3Y }} 
                     className="absolute w-[135px] h-[135px] md:w-[160px] md:h-[160px] bg-[#00E1FD] border-[6px] border-black p-3 md:p-4 shadow-[6px_6px_0px_0px_#000] flex flex-col justify-center text-center z-40 bottom-[25%] left-[5%] md:left-[10%]"
                   >
-                    <h3 className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2" style={{ fontFamily: "var(--font-bebas)" }}>IMMUTABLE</h3>
-                    <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">Rust & Anchor execution. Zero backdoors.</p>
+                    <h3
+                      className="text-black font-black text-xl md:text-2xl uppercase leading-none mb-2"
+                      style={{ fontFamily: "var(--font-bebas)" }}
+                    >
+                      RULES ON-CHAIN
+                    </h3>
+                    <p className="text-black font-mono text-[9px] md:text-[11px] font-bold uppercase leading-tight">
+                      FIXED SPLIT: 90% CONSERVATIVE, 10% AGGRESSIVE. NO HIDDEN LEVERS, ONLY CODE.
+                    </p>
                   </motion.div>
 
                   {/* Q4: Zero Friction */}
