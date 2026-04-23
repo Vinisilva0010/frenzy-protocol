@@ -7,27 +7,73 @@ import { motion, AnimatePresence } from "framer-motion";
 const FAQ_DATA = [
   {
     id: "01",
-    question: "HOW DOES THE CORE SPLIT ACTUALLY WORK?",
-    answer: "It is pure math executed on-chain. When you call the splitDeposit instruction, the Anchor smart contract automatically routes 50% of your capital to a secure, cold VaultState. The remaining 50% is injected into our high-frequency acceleration engine. No human intervention.",
+    question: "HOW DOES THE 90% / 10% SPLIT ACTUALLY WORK?",
+    answer:
+      "Every deposit goes into a Solana smart contract vault. On-chain, the contract mathematically splits the position into two internal buckets: 90% is tagged as the Senior, Conservative layer, and 10% as the Junior, Aggressive layer. PnL, losses and withdrawals are always calculated with this split in mind: the Senior layer gets paid first and is protected by design, while the Junior layer takes first loss and captures all excess upside.",
     color: "#9945FF", // Rare Purple
   },
   {
     id: "02",
-    question: "WHAT HAPPENS DURING A MARKET FLASH CRASH?",
-    answer: "The Watchdog wakes up. Our pure Rust backend continuously queries the network. If the Oracle detects an abrupt dump crossing our critical threshold, it fires the triggerKillSwitch command instantly, hard-locking your funds and shielding you from cascading liquidations while you sleep.",
+    question: "WHAT HAPPENS IF THERE ARE DEFAULTS OR A CREDIT SHOCK?",
+    answer:
+      "If the real-world credit portfolio suffers losses, they are applied to the Junior (Aggressive) layer first. For example, if the overall credit pool takes a 4% hit, that 4% is absorbed entirely by the 10% Junior capital while the 90% Senior capital remains untouched. Only if cumulative losses exceed the 10% protection buffer does the Senior, Conservative layer start to be affected. In short: Junior is built to eat the pain first.",
     color: "#14F195", // Toxic Green
   },
   {
     id: "03",
-    question: "WHY GROQ LPU INSTEAD OF TRADITIONAL SERVERS?",
-    answer: "Latency is the enemy. By piping our Rust market context directly into Groq LPU hardware, we achieve ultrafast inference speeds with a virtually non-existent memory footprint. We don't wait for blocks; we anticipate them.",
+    question: "WHERE DOES THE YIELD COME FROM, IF THIS IS NOT JUST DEFI FARMING?",
+    answer:
+      "Yield does not come from token inflation or random farming rewards. The idea is to route on-chain liquidity into Brazilian structured credit: receivables funds and securitized credit portfolios that lend to real companies. Those borrowers pay interest in fiat. That interest, net of fees and risk, is what the protocol reflects back into the vault as yield. During the hackathon phase, this behavior is simulated, but the target architecture is pure real-world credit, not speculative DeFi loops.",
     color: "#00E1FD", // Anomaly Cyan
   },
   {
     id: "04",
-    question: "HOW DO I DEPOSIT IF THERE IS NO DAPP TO CONNECT TO?",
-    answer: "Friction is dead. We use Next.js 16 and Turbopack to render Solana Blinks directly into your X (Twitter) timeline. You click 'DEPOSIT' on a tweet, our API constructs the Base64 transaction payload, and your Phantom wallet prompts the signature. You never leave the social feed.",
-    color: "#FF00FF", // Radioactive Pink
+    question: "IS THIS LIVE WITH REAL MONEY OR JUST A PROOF OF CONCEPT?",
+    answer:
+      "Right now, FRENZY runs as a Proof of Concept on Solana test environments. The smart contracts, tranche math and default/waterfall logic are real and executable on-chain, but all off-chain flows (BRL conversion, FIDC allocation, registries) are simulated via the dashboard. No user is exposed to real credit risk at this stage. A mainnet, real-capital deployment would only happen after partnerships with regulated credit platforms and the appropriate licensing path in Brazil.",
+    color: "#FF3366", // Radioactive Pink
+  },
+  {
+    id: "05",
+    question: "HOW DO I DEPOSIT IF THERE IS NO TRADITIONAL DAPP CONNECT BUTTON?",
+    answer:
+      "FRENZY is built around Solana Actions and Blinks. Instead of forcing you to go to a separate DeFi dashboard, deposits can be triggered directly from surfaces like X (Twitter) or from lightweight widgets. When you click a Frenzy Action, your wallet still signs a normal Solana transaction, but the entry point is the social feed, not a heavy dapp. Under the hood, it all lands in the same vault smart contract.",
+    color: "#FF00FF", // Neon Pink
+  },
+  {
+    id: "06",
+    question: "WHAT IS THE REAL DIFFERENCE BETWEEN THE CONSERVATIVE AND AGGRESSIVE PROFILES?",
+    answer:
+      "Both profiles are backed by exposure to the same underlying credit engine, but they sit in very different positions in the waterfall. The Conservative profile is Senior: it has priority on withdrawals and gets paid its target yield before anyone else. It does not share in leveraged upside, but it is shielded by the 10% protection buffer. The Aggressive profile is Junior: it absorbs first loss and in exchange receives all the extra yield above the Senior target, which can produce very high returns in good credit environments, but also large drawdowns in bad ones.",
+    color: "#FBBF24", // Gold
+  },
+  {
+    id: "07",
+    question: "CAN I LOSE MONEY IN THE AGGRESSIVE PROFILE?",
+    answer:
+      "Yes. The Aggressive profile is explicitly built as the first-loss layer. If defaults in the credit portfolio stay below the 10% protection cushion, the Junior capital will see volatility but can still come out ahead because it receives all excess yield. If defaults spike and eat through that cushion, the Junior layer can lose a significant share of its capital, up to 100% in extreme stress scenarios. It is a high-voltage position and should be treated as such.",
+    color: "#F97316", // Orange
+  },
+  {
+    id: "08",
+    question: "CAN I LOSE MONEY IN THE CONSERVATIVE PROFILE?",
+    answer:
+      "The Conservative profile is designed to be protected by the structure, not magically risk-free. As long as cumulative losses in the credit pool stay within the 10% protection provided by the Junior layer, the Senior capital should remain intact and continue to receive its target yield. If there is a systemic credit event so large that losses blow past that 10% cushion, the Senior layer can start to take losses too. The architecture reduces risk, it does not delete it from reality.",
+    color: "#22C55E", // Green
+  },
+  {
+    id: "09",
+    question: "WHY IS THERE NO INSTANT WITHDRAWAL (NO D+0 LIQUIDITY)?",
+    answer:
+      "Because the underlying assets are not volatile tokens that you can dump on an exchange; they are real-world credit positions that settle on their own timetable. To avoid fake liquidity and DeFi-style bank runs, withdrawals follow windows aligned with the credit portfolio, such as D+30 or D+60 cycles. The smart contract enforces time locks that mirror the real-world liquidity of the fund, instead of pretending that long-dated credit can be cashed out instantly.",
+    color: "#3B82F6", // Blue
+  },
+  {
+    id: "10",
+    question: "HOW DO YOU PLAN TO HANDLE REGULATION AND SECURITIES RULES?",
+    answer:
+      "Digitizing claims on Brazilian credit is not a game; it touches securities law. The current hackathon version is deliberately restricted to simulation and testnet. For a real-money deployment, the roadmap includes plugging into tokenization platforms and credit structures that already operate under CVM rules in Brazil, such as regulated FIDCs or sandbox/crowdfunding frameworks. FRENZY is the web3 rails and user experience layer, not a shortcut around regulation.",
+    color: "#A855F7", // Purple
   },
 ];
 

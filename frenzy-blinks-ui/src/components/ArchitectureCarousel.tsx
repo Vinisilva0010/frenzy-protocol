@@ -7,38 +7,38 @@ import Image from "next/image";
 const CARDS_DATA = [
   {
     id: "01",
-    title: "THE CORE SPLIT",
-    desc: "Open-source risk management vault. Capital is mathematically split: 50% locked in institutional safety, 50% deployed for maximum acceleration. Autonomous engine, zero manual clicks.",
+    title: "INSTITUTIONAL SPLIT",
+    desc: "Open-source FIDC architecture. Capital is mathematically split on-chain: 90% locked in the Senior Tranche for absolute safety, and 10% in the Junior Tranche to absorb defaults and capture Alpha.",
     color: "#9945FF",
   },
   {
     id: "02",
-    title: "ON-CHAIN ENGINE",
-    desc: "Native Rust smart contracts via Anchor framework. The VaultState secures the core. The splitDeposit instruction executes low-level on Solana, ensuring immutable rules.",
+    title: "ZERO-TRUST MATH",
+    desc: "Native Rust smart contracts via Anchor. 100% of yield distribution and subordination ratio math happens directly on the blockchain using safe math (checked_math), preventing oracle manipulation.",
     color: "#14F195",
   },
   {
     id: "03",
-    title: "THE WATCHDOG",
-    desc: "Pure async Rust backend powered by Tokio. A low-latency RPC Oracle integrated with Groq LPU hardware for ultrafast market inference and zero-bloat memory footprint.",
+    title: "ANTI-BANK RUN",
+    desc: "Liquidity is the protocol's oxygen. The smart contract natively queries the Solana cluster clock to enforce strict withdrawal time-locks, matching RWA liquidity and mitigating panic-induced bank runs.",
     color: "#00E1FD",
   },
   {
     id: "04",
-    title: "KILL SWITCH",
-    desc: "Hard-coded hedge fund grade safety lock. If the Oracle detects an abrupt market dump, triggerKillSwitch is instantly fired, locking funds and preventing cascading liquidations.",
+    title: "RBAC KILL SWITCH",
+    desc: "Strict separation of powers via ProtocolConfig. Yield Admins inject returns, while an isolated Emergency Admin holds the Global Kill-Switch to freeze operations and protect treasury funds if anomalies occur.",
     color: "#FF00FF",
   },
   {
     id: "05",
     title: "BLINK SHOWCASE",
-    desc: "Next.js 16 + Turbopack API infrastructure. We bypass traditional wallet connection friction by rendering Solana Blinks directly into the X feed to capture liquidity instantly.",
+    desc: "Next.js API infrastructure bridging social traffic to RWA. We bypass traditional DeFi friction by rendering Solana Actions (Blinks) directly into the X feed to capture retail liquidity instantly.",
     color: "#FFE600",
   },
   {
     id: "06",
     title: "1-CLICK EXECUTION",
-    desc: "Anchor IDL imported directly to the frontend. The API builds complex Base64 transactions. Users sign via Phantom extension without ever leaving their social media timeline.",
+    desc: "Anchor IDL imported directly to the frontend. The API builds complex Base64 transactions. Users deposit into Tranches signing via Phantom without ever leaving their social media timeline.",
     color: "#FF3366",
   },
 ];

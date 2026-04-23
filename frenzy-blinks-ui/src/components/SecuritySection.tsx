@@ -8,36 +8,36 @@ const STORY_DATA = [
   {
     step: 1,
     image: "/hacker-1.webp",
-    title: "THE ATTACK VECTOR",
-    desc: "A malicious actor attempts to exploit the liquidity pool. Traditional protocols would panic, but FRENZY's hybrid risk management engine is already waiting. 50% of the capital is locked in Deep Safety.",
+    title: "THE SYSTEMIC DEFAULT",
+    desc: "A massive default hits the real-world credit portfolio. Traditional DeFi would face insolvency and panic, but FRENZY's institutional engine is ready. 90% of the capital is shielded in the Senior Tranche.",
     color: "#9945FF" 
   },
   {
     step: 2,
     image: "/hacker-2.webp",
-    title: "MEV SHIELD ACTIVATED",
-    desc: "The attacker tries a sandwich attack to drain slippage. Denied. FRENZY routes transactions through Jito bundles. Front-running is architecturally impossible. Value leakage is zero.",
+    title: "JUNIOR SHIELD ACTIVATED",
+    desc: "The financial loss propagates through the protocol. Instead of draining everyone, the Junior Tranche absorbs 100% of the impact. This first-loss capital protects the conservative base. Senior funds remain untouched.",
     color: "#FF3366" 
   },
   {
     step: 3,
     image: "/hacker-3.webp",
-    title: "IDL IMMUTABILITY",
-    desc: "Desperate, the hacker attacks the contract logic. The Anchor Rust infrastructure holds the line. The splitDeposit instruction is immutable on the Solana L1. No proxies, no backdoors. The code is the law.",
+    title: "ZERO-COPY IMMUTABILITY",
+    desc: "Desperate, a malicious actor tries to exploit the smart contract to bypass the tranche rules. Denied. The Anchor Rust infrastructure enforces a strict 88-byte Zero-Copy memory layout. Corrupted data is instantly rejected.",
     color: "#00E1FD" 
   },
   {
     step: 4,
     image: "/hacker-4.webp",
-    title: "THE WATCHDOG WAKES UP",
-    desc: "The sudden network anomaly alerts the FRENZY Sentinel. Powered by a pure Rust Tokio backend and Groq LPU inference, the AI Oracle processes the threat in milliseconds.",
+    title: "ANTI-BANK RUN ENFORCED",
+    desc: "Market panic triggers mass withdrawal requests to drain the liquidity. The contract natively queries the Solana Clock, enforcing strict 24-hour cooling-off time-locks. Flash-loan attacks and liquidity drains are mathematically blocked.",
     color: "#FFE600" 
   },
   {
     step: 5,
     image: "/hacker-5.webp",
-    title: "AUTONOMOUS KILL SWITCH",
-    desc: "Threat neutralized. The triggerKillSwitch is fired on-chain. Operations are hard-locked, protecting the vault from cascading liquidations. The attacker is burned. Your capital sleeps safely.",
+    title: "RBAC KILL SWITCH",
+    desc: "To prevent further systemic damage, the isolated Emergency Admin triggers the Global Kill-Switch. Operations are hard-locked on-chain. The treasury is secured. Your capital sleeps safely inside the FIDC-X infrastructure.",
     color: "#14F195" 
   }
 ];

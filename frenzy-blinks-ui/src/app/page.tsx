@@ -1,3 +1,4 @@
+
 import HeroSection from '@/components/hero/HeroSection'
 import HeroCanvas from '@/components/hero/HeroCanvas' 
 import VaultCanvas from '@/components/hero/VaultCanvas'
@@ -14,6 +15,7 @@ import Analytics from '@/components/Analytics'
 export default function Home() {
   return (
     <>
+    
       <Navbar />
       <HeroSection />
       <HeroCanvas />

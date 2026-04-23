@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
-  
   { name: "ENTER VAULT", href: "/demo" },
   { name: "PORTFOLIO", href: "/dashboard" },
   { name: "GLOBAL STATS", href: "/analytics" },
-  
+  { name: "FAQ", href: "/faq" },
 ];
 
 export default function Navbar() {
@@ -61,23 +60,22 @@ export default function Navbar() {
           {/* BOTÕES DE AÇÃO BRUTALISTAS */}
           <div className="flex items-center gap-4 ml-4">
             <a 
-              href="/docs" 
+              href="/conservative" 
               className="bg-white border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
             >
-              CONSERVATIVE
-               YIELD
+              90% SENIOR
             </a>
             <a 
-              href="/whitepaper" 
-              className="bg-white border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+              href="/junior" 
+              className="bg-[#FFE600] border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
             >
-              DOCS
+              10% JUNIOR
             </a>
             <a 
               href="/security" 
               className="bg-[#14F195] border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
             >
-              security 
+              SECURITY & DOCS
             </a>
           </div>
         </div>
@@ -101,31 +99,38 @@ export default function Navbar() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-0 z-[999] bg-[#9945FF] flex flex-col items-center justify-center gap-8 p-10 lg:hidden border-l-[8px] border-black"
+            className="fixed inset-0 z-[999] bg-[#9945FF] flex flex-col items-center justify-center gap-6 p-8 lg:hidden border-l-[8px] border-black overflow-y-auto"
           >
             {/* Fechar no Mobile */}
-            <button onClick={toggleMenu} className="absolute top-8 right-8 text-black font-black text-4xl">
+            <button onClick={toggleMenu} className="absolute top-6 right-6 text-black font-black text-4xl">
               [ X ]
             </button>
 
-            {NAV_LINKS.map((link) => (
-              <a 
-                key={link.name}
-                href={link.href}
-                onClick={toggleMenu}
-                className="text-5xl md:text-6xl font-black text-black uppercase tracking-tighter hover:text-white"
-                style={{ fontFamily: "var(--font-bebas)" }}
-              >
-                {link.name}
-              </a>
-            ))}
+            {/* LINKS TEXTUAIS MOBILE */}
+            <div className="flex flex-col items-center gap-4 mt-12">
+              {NAV_LINKS.map((link) => (
+                <a 
+                  key={link.name}
+                  href={link.href}
+                  onClick={toggleMenu}
+                  className="text-4xl md:text-5xl font-black text-black uppercase tracking-tighter hover:text-white"
+                  style={{ fontFamily: "var(--font-bebas)" }}
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
 
-            <div className="flex flex-col w-full gap-4 mt-10">
-              <a href="/docs" className="bg-white border-4 border-black p-6 text-center text-black font-black text-2xl uppercase shadow-[8px_8px_0px_0px_#000]">
-                DOCUMENTATION
+            {/* BOTÕES DE AÇÃO MOBILE */}
+            <div className="flex flex-col w-full max-w-sm gap-4 mt-8">
+              <a href="/conservative" onClick={toggleMenu} className="bg-white border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
+                90% SENIOR
               </a>
-              <a href="#contract" className="bg-[#14F195] border-4 border-black p-6 text-center text-black font-black text-2xl uppercase shadow-[8px_8px_0px_0px_#000]">
-                VIEW CONTRACT
+              <a href="/junior" onClick={toggleMenu} className="bg-[#FFE600] border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
+                10% JUNIOR
+              </a>
+              <a href="/security" onClick={toggleMenu} className="bg-[#14F195] border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
+                SECURITY & DOCS
               </a>
             </div>
           </motion.div>
