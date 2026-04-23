@@ -1,5 +1,5 @@
 {
-  "address": "HGZqmfyEWnCjq3rZ2xKbfZhZ4yCXMs4QMQhunexpGW7e",
+  "address": "BLafEMNRKAimMcisFEpUg8oZuCKSSNaujdQf7moNpFyx",
   "metadata": {
     "name": "frenzy_vault",
     "version": "0.1.0",
@@ -7,6 +7,121 @@
     "description": "Created with Anchor"
   },
   "instructions": [
+    {
+      "name": "close_corrupted_vault",
+      "discriminator": [
+        217,
+        141,
+        62,
+        9,
+        85,
+        190,
+        4,
+        118
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true
+        },
+        {
+          "name": "vault_state",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "devnet_yield_simulator",
+      "discriminator": [
+        86,
+        64,
+        180,
+        122,
+        72,
+        79,
+        59,
+        223
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "vault_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  101,
+                  110,
+                  122,
+                  121,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "vault_state.authority",
+                "account": "VaultState"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "total_payment",
+          "type": "u64"
+        }
+      ]
+    },
     {
       "name": "initialize",
       "discriminator": [
@@ -61,22 +176,22 @@
       ],
       "args": [
         {
-          "name": "max_loss_bps",
+          "name": "subordination_ratio_bps",
           "type": "u16"
         }
       ]
     },
     {
-      "name": "inject_mock_yield",
+      "name": "initialize_protocol",
       "discriminator": [
-        97,
-        76,
-        70,
-        255,
-        51,
-        62,
-        21,
-        193
+        188,
+        233,
+        252,
+        106,
+        134,
+        146,
+        202,
+        91
       ],
       "accounts": [
         {
@@ -85,8 +200,32 @@
           "signer": true
         },
         {
-          "name": "vault_state",
-          "writable": true
+          "name": "protocol_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "system_program",
@@ -95,14 +234,67 @@
       ],
       "args": [
         {
-          "name": "safe_yield",
-          "type": "u64"
+          "name": "yield_admin",
+          "type": "pubkey"
         },
         {
-          "name": "chaos_yield",
+          "name": "emergency_admin",
+          "type": "pubkey"
+        },
+        {
+          "name": "global_daily_limit",
           "type": "u64"
         }
       ]
+    },
+    {
+      "name": "restore_protocol",
+      "discriminator": [
+        13,
+        102,
+        70,
+        246,
+        134,
+        200,
+        61,
+        98
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "protocol_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
     },
     {
       "name": "split_deposit",
@@ -123,8 +315,60 @@
           "signer": true
         },
         {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
           "name": "vault_state",
-          "writable": true
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  101,
+                  110,
+                  122,
+                  121,
+                  95,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          }
         },
         {
           "name": "system_program",
@@ -157,11 +401,93 @@
           "signer": true
         },
         {
-          "name": "vault_state",
-          "writable": true
+          "name": "protocol_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
         }
       ],
       "args": []
+    },
+    {
+      "name": "update_admins",
+      "discriminator": [
+        179,
+        114,
+        235,
+        27,
+        31,
+        235,
+        125,
+        107
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "protocol_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "new_yield",
+          "type": "pubkey"
+        },
+        {
+          "name": "new_emergency",
+          "type": "pubkey"
+        }
+      ]
     },
     {
       "name": "withdraw",
@@ -180,6 +506,34 @@
           "name": "user",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "protocol_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
         },
         {
           "name": "vault_state",
@@ -221,6 +575,19 @@
   ],
   "accounts": [
     {
+      "name": "ProtocolConfig",
+      "discriminator": [
+        207,
+        91,
+        250,
+        28,
+        152,
+        179,
+        215,
+        209
+      ]
+    },
+    {
       "name": "VaultState",
       "discriminator": [
         228,
@@ -237,32 +604,118 @@
   "errors": [
     {
       "code": 6000,
-      "name": "KillSwitchActive",
-      "msg": "Acesso Negado: O Kill-Switch foi ativado e o protocolo está trancado."
+      "name": "UnauthorizedMaster",
+      "msg": "Apenas o Master Admin pode executar esta operação."
     },
     {
       "code": 6001,
-      "name": "InsufficientFunds",
-      "msg": "Saldo Insuficiente: Tentativa de saque maior que o saldo disponível."
+      "name": "UnauthorizedEmergencyAdmin",
+      "msg": "Apenas o Emergency Admin pode ativar o Kill Switch."
     },
     {
       "code": 6002,
-      "name": "UnauthorizedAccess",
-      "msg": "Violação de Segurança: A assinatura não corresponde ao dono do cofre."
+      "name": "Unauthorized",
+      "msg": "Operação não autorizada para esta conta."
     },
     {
       "code": 6003,
-      "name": "UnauthorizedOracle",
-      "msg": "Violação de Oráculo: Apenas o Administrador Mestre pode executar esta ação."
+      "name": "UnauthorizedAccess",
+      "msg": "Vault não pertence ao usuário conectado."
+    },
+    {
+      "code": 6004,
+      "name": "KillSwitchActive",
+      "msg": "Kill Switch global ativo. Protocolo em emergência."
+    },
+    {
+      "code": 6005,
+      "name": "WithdrawalCooldownActive",
+      "msg": "Cooldown de 24h ativo. Aguarde antes de sacar novamente."
+    },
+    {
+      "code": 6006,
+      "name": "GlobalWithdrawalQuotaExceeded",
+      "msg": "Cota global de saques atingida. Tente novamente amanhã."
+    },
+    {
+      "code": 6007,
+      "name": "InvalidAmount",
+      "msg": "Valor inválido. Deve ser maior que zero."
+    },
+    {
+      "code": 6008,
+      "name": "InsufficientFunds",
+      "msg": "Saldo insuficiente no cofre."
+    },
+    {
+      "code": 6009,
+      "name": "InvalidRatio",
+      "msg": "Subordination ratio acima do teto (5000 bps = 50%)."
+    },
+    {
+      "code": 6010,
+      "name": "RatioTooLow",
+      "msg": "Subordination ratio abaixo do piso mínimo (500 bps = 5%)."
+    },
+    {
+      "code": 6011,
+      "name": "MathOverflow",
+      "msg": "Overflow matemático detectado. Operação abortada."
+    },
+    {
+      "code": 6012,
+      "name": "InvariantViolation",
+      "msg": "Invariante quebrada: TVL inconsistente pós-operação."
+    },
+    {
+      "code": 6013,
+      "name": "SimulationDisabled",
+      "msg": "Modo de simulação desabilitado em Mainnet."
     }
   ],
   "types": [
     {
+      "name": "ProtocolConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "master_admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "yield_admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "emergency_admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "global_withdrawal_quota_24h",
+            "type": "u64"
+          },
+          {
+            "name": "global_withdrawn_last_24h",
+            "type": "u64"
+          },
+          {
+            "name": "global_quota_reset_ts",
+            "type": "i64"
+          },
+          {
+            "name": "simulation_mode",
+            "type": "bool"
+          },
+          {
+            "name": "kill_switch",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
       "name": "VaultState",
-      "serialization": "bytemuck",
-      "repr": {
-        "kind": "c"
-      },
       "type": {
         "kind": "struct",
         "fields": [
@@ -271,29 +724,28 @@
             "type": "pubkey"
           },
           {
-            "name": "safety_balance",
+            "name": "senior_tranche",
             "type": "u64"
           },
           {
-            "name": "chaos_balance",
+            "name": "junior_tranche",
             "type": "u64"
           },
           {
-            "name": "max_daily_loss_bps",
+            "name": "subordination_ratio_bps",
             "type": "u16"
           },
           {
-            "name": "kill_switch",
-            "type": "u8"
+            "name": "last_withdrawal_timestamp",
+            "type": "i64"
           },
           {
-            "name": "_padding",
-            "type": {
-              "array": [
-                "u8",
-                5
-              ]
-            }
+            "name": "accumulated_losses",
+            "type": "u64"
+          },
+          {
+            "name": "accumulated_profits",
+            "type": "u64"
           }
         ]
       }

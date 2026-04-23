@@ -38,8 +38,14 @@ function BlinkRenderer() {
   const { adapter } = useBlinkSolanaWalletAdapter('https://api.devnet.solana.com');
   const { connected } = useWallet(); 
   
+  // 🔥 A MÁGICA ENTRA AQUI: O Next.js decide o link sozinho!
+  const API_URL = process.env.NODE_ENV === 'development' 
+    ? 'http://localhost:3000' 
+    : 'https://frenzy.zanvexis.com';
+
   const { blink, isLoading } = useBlink({ 
-    url: 'https://frenzy.zanvexis.com/api/actions/frenzy?v=16' 
+    // Usando a crase (`) para juntar a variável com o resto do caminho
+    url: `${API_URL}/api/actions/frenzy`
   });
 
   if (!mounted) return null;

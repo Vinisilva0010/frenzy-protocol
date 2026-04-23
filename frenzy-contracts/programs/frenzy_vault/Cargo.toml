@@ -12,13 +12,13 @@ no-entrypoint = []
 no-idl = []
 no-log-ix-name = []
 cpi = ["no-entrypoint"]
-default = []
 idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+default = ["devnet-simulation"]
+devnet-simulation = []
 
 [dependencies]
 anchor-lang = "1.0.0"
 anchor-spl = "1.0.0"
-bytemuck = { version = "1.19.0", features = ["min_const_generics"] }
 
 [dev-dependencies]
 solana-program-test = "2.0.0"

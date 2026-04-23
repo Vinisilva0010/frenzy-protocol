@@ -1,66 +1,63 @@
-DOSSIÊ DE ARQUITETURA: FRENZY PROTOCOL
-Visão Geral (O Big Picture):
-Um protocolo DeFi na Solana desenhado para o hackathon Colosseum. O sistema divide o risco do usuário automaticamente: 50% em ativos seguros e 50% em exposição agressiva (caos/alpha), utilizando um Oráculo de Inteligência Artificial de baixíssima latência para ler o mercado e disparar transações protegidas contra robôs de MEV. Tudo envelopado numa interface de 1-clique via Solana Blinks no X (Twitter).
+🇧🇷 FRENZY Protocol | FIDC-X
+The Global Bridge to Brazil’s High-Yield Credit Market via Solana Actions (Blinks).
 
-🛠️ 1. O Arsenal (Tech Stack Utilizado)
-Blockchain/Contratos: Solana & Anchor Framework (Test Validator/Localnet).
+🚨 O Crime Silencioso (The Macro Opportunity)
+Existe um mercado de R$ 400 bilhões no Brasil (FIDC - Fundos de Investimento em Direitos Creditórios) rendendo de 15% a 25% ao ano em cima de recebíveis e cartões de crédito.
+Um investidor institucional em São Paulo consegue acesso. Um investidor de varejo em Berlim, Nova York ou Tóquio não consegue — não por falta de interesse, mas por falta de infraestrutura.
 
-Backend (O Motor): Rust puro, assíncrono (Tokio), Reqwest para HTTP.
+A Europa e os EUA pagam 4% a.a. O Brasil paga +20% a.a.
+O FRENZY Protocol é a infraestrutura de 1 clique que arbitra essa assimetria massiva de juros para o mundo inteiro usando a Solana.
 
-Inteligência Artificial (O Oráculo): API da Groq (Hardware LPU) rodando modelo Llama 3 (substituindo IA local para poupar os 8GB de RAM da sua máquina).
+⚙️ O Motor (Institutional Subordination Engine)
+Não somos apenas um cofre de repasse. O Smart Contract do FRENZY (escrito em Rust/Anchor) é um motor on-chain de Tranching de Crédito (Waterfall).
 
-Frontend & API (A Vitrine): Next.js 16 (App Router, Turbopack), @solana/actions, TailwindCSS.
+Abandone os modelos amadores de "50/50". O nosso protocolo permite a configuração de um Subordination Ratio (ex: 20% / 80%), dividindo o risco do mundo real de forma matemática:
 
-Design System: Estética "Smiling Friends" (Cartunesco, cores chapadas e contrastantes da Solana - Verde/Roxo), mas com acabamento de alta confiança (Bank-grade UX) para evitar alarmes de scam.
+🛡️ SENIOR TRANCHE (Deep Safety - Brazil RWA): O capital blindado. Tem prioridade absoluta no recebimento. Absorve 0% dos calotes iniciais. Feito para o investidor que quer bater a inflação global com risco minimizado (Target: 10% - 15% APY).
 
-🚀 2. O QUE JÁ CONSTRUÍMOS E VALIDAMOS (O Progresso)
-Fase 1: A Fundação On-Chain (Smart Contracts)
+☢️ JUNIOR TRANCHE (Max Alpha - High Yield Credit): A cota subordinada. Se o mercado balançar, esta cota absorve a inadimplência para proteger a Sênior. MAS, se as faturas forem pagas, a Júnior engole 100% do lucro excedente (Alpha) dos juros rotativos de +300% a.a. do Brasil.
 
-Subimos a rede local da Solana (Surfpool).
+🔒 Segurança Nível Adevar Labs (Security Architecture)
+Segurança não é promessa, é matemática provada. O FRENZY foi arquitetado com padrões institucionais:
 
-Configuramos o ambiente do Anchor para compilar e testar a matemática do cofre (Vault) no nível da blockchain.
+Formal Invariant Coverage: Testes matemáticos rigorosos. Total Senior + Total Junior == Total TVL sempre.
 
-Fase 2: O Cão de Guarda (Backend em Rust)
+Double-Layer Anti-Bank Run (Sybil-Resistant):
 
-Conexão Segura: Lemos a Private Key (Base58) do agente via .env e conectamos com a Solana via RPC local. O robô já sabe quem é e quanto combustível (SOL) tem.
+Individual Cooldown: Travas de 24h por usuário via Clock::get().
 
-O Pivô de Infraestrutura (Genialidade): Percebemos que rodar IA local pesaria demais nos seus 8GB de RAM. Pivotamos para a API da Groq. O Rust agora monta um contexto de mercado (MarketContext), atira pra nuvem e recebe a decisão em milissegundos.
+Global Withdrawal Quota: Uma trava sistêmica (Global TVL Limit). Se o protocolo sofrer um ataque Sybil coordenado, as portas se fecham automaticamente.
 
-Programação Defensiva (Kill Switch): O código tem regras estritas. Se o mercado desabar mais de 8% num dia, a IA grita KILL_SWITCH e o Rust entra em modo de lockdown para proteger o capital.
+Imunidade a Math Overflow: Todo o cálculo de Waterfall (Cascata) utiliza checked_add, checked_sub, checked_mul e checked_div, com conversões seguras para u128.
 
-Simulador de Execução: Criamos o módulo executor.rs que recebe a decisão do Oráculo e simula o roteamento no Jupiter e o empacotamento anti-MEV no Jito.
+Isolamento de Estado: Contas PDA individuais evitam poluição de estado e colisões na EVM/SVM.
 
-Fase 3: A Rota de Conversão (Solana Blinks & Actions)
+🏗️ Mainnet Roadmap & Devnet Simulation (Para VCs e Juízes)
+Sabemos que plugar RWA (Ativos do Mundo Real) exige KYC e integração B2B com entidades reguladas (CVM) como AmFi ou Credix.
 
-Criamos o projeto Next.js 16 do zero. Tivemos um conflito de dependências com a versão experimental 2.0 da Solana, mas agimos rápido e forçamos a versão 1.x estável para garantir a fundação.
+No Hackathon: O protocolo utiliza o módulo DevnetYieldSimulator, protegido pela feature flag do Rust #[cfg(feature = "devnet-simulation")]. Isso garante aos auditores que o simulador é fisicamente impossível de ser compilado na Mainnet. O simulador permite que juízes executem Stress Tests institucionais ao vivo (Cenários de Lucro e Calote) para validar a matemática do nosso Subordination Engine.
 
-API GET (A Vitrine): Montamos o JSON que o Twitter lê para renderizar o Card com a nossa copy: "50% Paz de Espírito. 50% Aceleração Máxima".
+O Pós-Hackathon (Destino dos $250k):
 
-API POST (O Motor da Transação): Construímos a lógica que recebe a chave pública do usuário que clicou no Twitter, monta a transação não assinada (SystemProgram.transfer) de 1 SOL ou 5 SOL, converte para Base64 e devolve pro Phantom assinar.
+Dia 1-30: Licenciamento jurídico e parceria CVM.
 
-Validação Hacker: Testamos a rota via terminal usando curl e confirmamos que o Next.js está cuspindo a transação perfeitamente.
+Dia 30-60: Substituição do DevnetYieldSimulator por chamadas CPI (Cross-Program Invocation) reais para oráculos institucionais.
 
-🎯 3. O QUE FALTA PARA O PRODUTO FINAL (O Roadmap)
-Agora nós temos blocos isolados muito fortes. O que falta é a "Cola de Integração" para transformar isso num produto nível Colosseum.
+Dia 90: Lançamento Mainnet. Meta Realista: $1M USDC de TVL captados exclusivamente via Blinks no X/Twitter.
 
-Passo 1: Ligar o Blink ao Smart Contract Real (Prioridade)
+🎨 [PARA O CEO] GLOSSÁRIO DE UI/UX (Use no Frontend)
+Use estas exatas palavras no seu painel Next.js para manter a narrativa de Wall Street:
 
-O problema: Hoje, o botão no Twitter faz uma transferência de SOL burra (de carteira pra carteira).
+Título do Dashboard: VAULT TELEMETRY: REAL-TIME RWA RISK MANAGEMENT
 
-A solução: Importar a IDL (Interface) do seu contrato Anchor para o Next.js. O método POST vai parar de fazer transferência simples e vai chamar a instrução real deposit do seu protocolo.
+Botão de Depósito (Sênior): DEPOSIT INTO SENIOR (FIXED YIELD HEDGE)
 
-Passo 2: O Túnel Ngrok (Teste no Mundo Real)
+Botão de Depósito (Júnior): DEPOSIT INTO JUNIOR (SUBORDINATED ALPHA)
 
-O X (Twitter) não consegue acessar o seu localhost. Precisamos instalar e rodar o Ngrok para gerar um link público temporário HTTPS e jogar isso no validador de Blinks da Solana para ver o Card vivo e testar o fluxo abrindo a sua extensão do Phantom de verdade.
+Cofre Sênior (Texto Secundário): Protected Brazil Credit - Absorbs 0% Initial Default
 
-Passo 3: A UI "Smiling Friends" Premium (Frontend)
+Cofre Júnior (Texto Secundário): High-Frequency Revolving Credit - Max Alpha Exposure
 
-Voltar no arquivo page.tsx com as suas 3 imagens PNG renderizadas.
+Botão do Simulador (Sucesso): SIMULATE MARKET PROFIT (WATERFALL CALCULATION)
 
-Aplicar o design cartunesco/bizarro, mas estruturar os contêineres, as fontes e os botões com precisão milimétrica para passar credibilidade de instituição financeira da Web3.
-
-Passo 4: Integração Jupiter/Jito Real (Transição para Devnet)
-
-Mudar a nossa rede do localhost para a Devnet.
-
-Trocar aquele simulador de sleep no Rust pelas chamadas reais de API: buscar a cotação no Jupiter (quote-api) e enviar o pacote blindado pro Jito.
+Botão do Simulador (Crise): SIMULATE CREDIT DEFAULT (STRESS TEST)

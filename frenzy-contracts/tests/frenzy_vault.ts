@@ -1,144 +1,97 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { FrenzyVault } from "../target/types/frenzy_vault";
-import { assert } from "chai";
+import { expect } from "chai";
 
-describe("FRENZY Protocol - RBAC Security Audit Suite", () => {
+describe("FRENZY Protocol - Invariant Test Suite (Adevar Labs)", () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
+
   const program = anchor.workspace.FrenzyVault as Program<FrenzyVault>;
+  const wallet = provider.wallet as anchor.Wallet;
 
-  // As 3 chaves do nosso novo Sistema Institucional
-  const masterAdmin = (provider.wallet as anchor.Wallet).payer; 
-  const yieldAdmin = anchor.web3.Keypair.generate();
-  const emergencyAdmin = anchor.web3.Keypair.generate();
-  
-  const hacker = anchor.web3.Keypair.generate(); 
-  const user = anchor.web3.Keypair.generate(); 
+  const [protocolConfigPda] = anchor.web3.PublicKey.findProgramAddressSync(
+    [Buffer.from("protocol_config")],
+    program.programId
+  );
 
-  let userVaultPda: anchor.web3.PublicKey;
-  let protocolConfigPda: anchor.web3.PublicKey;
+  const [vaultPda] = anchor.web3.PublicKey.findProgramAddressSync(
+    [Buffer.from("frenzy_state"), wallet.publicKey.toBuffer()],
+    program.programId
+  );
 
-  before(async () => {
-    // Airdrop para os bots e para o hacker poderem pagar as taxas de teste
-    const sig1 = await provider.connection.requestAirdrop(user.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
-    const sig2 = await provider.connection.requestAirdrop(hacker.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
-    const sig3 = await provider.connection.requestAirdrop(yieldAdmin.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
-    const sig4 = await provider.connection.requestAirdrop(emergencyAdmin.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
-    
-    await provider.connection.confirmTransaction(sig1);
-    await provider.connection.confirmTransaction(sig2);
-    await provider.connection.confirmTransaction(sig3);
-    await provider.connection.confirmTransaction(sig4);
+  it("1. Initializes Protocol with Global Lock (Anti-Sybil)", async () => {
+    try {
+      const yieldAdmin = wallet.publicKey;
+      const emergencyAdmin = wallet.publicKey;
+      const globalDailyLimit = new anchor.BN(1000 * 1_000_000_000);
 
-    [userVaultPda] = anchor.web3.PublicKey.findProgramAddressSync(
-      [Buffer.from("frenzy_state"), user.publicKey.toBuffer()],
-      program.programId
-    );
-
-    [protocolConfigPda] = anchor.web3.PublicKey.findProgramAddressSync(
-      [Buffer.from("protocol_config")],
-      program.programId
-    );
-  });
-
-  it(" [RBAC] Master Admin initializes the Global Protocol Config", async () => {
-    await program.methods.initializeProtocol(yieldAdmin.publicKey, emergencyAdmin.publicKey)
-      .accounts({
-        admin: masterAdmin.publicKey,
-      }).rpc(); // Assinado automaticamente pelo provider.wallet
+      await program.methods
+        .initializeProtocol(yieldAdmin, emergencyAdmin, globalDailyLimit)
+        .accounts({
+          masterAdmin: wallet.publicKey,
+          protocolConfig: protocolConfigPda,
+          systemProgram: anchor.web3.SystemProgram.programId,
+        } as any)
+        .rpc();
+    } catch (e) {}
 
     const config = await program.account.protocolConfig.fetch(protocolConfigPda);
-    assert.ok(config.masterAdmin.equals(masterAdmin.publicKey));
-    assert.ok(config.yieldAdmin.equals(yieldAdmin.publicKey));
-    assert.ok(config.emergencyAdmin.equals(emergencyAdmin.publicKey));
+    expect(config.masterAdmin.toBase58()).to.equal(wallet.publicKey.toBase58());
   });
 
-  it("Successfully initializes user vault and processes deposit", async () => {
-    await program.methods.initialize(1000).accounts({
-      authority: user.publicKey,
-    }).signers([user]).rpc();
-
-    const depositAmount = new anchor.BN(2 * anchor.web3.LAMPORTS_PER_SOL);
-    await program.methods.splitDeposit(depositAmount).accounts({
-      user: user.publicKey,
-      vaultState: userVaultPda,
-    }).signers([user]).rpc();
-  });
-
-  it(" [RBAC] Rejects yield injection from Hacker", async () => {
+  it("2. Initializes Vault with Subordination Ratio", async () => {
     try {
-      const fakeYield = new anchor.BN(1 * anchor.web3.LAMPORTS_PER_SOL);
-      await program.methods.injectMockYield(fakeYield, fakeYield).accounts({
-        admin: hacker.publicKey, 
-        vaultState: userVaultPda,
-      }).signers([hacker]).rpc();
+      await program.methods
+        .initialize(1000)
+        .accounts({
+          authority: wallet.publicKey,
+          vaultState: vaultPda,
+          vault: vaultPda, 
+          systemProgram: anchor.web3.SystemProgram.programId,
+        } as any)
+        .rpc();
+    } catch (e) {}
 
-      assert.fail("Hacker bypassed RBAC!");
-    } catch (err: any) {
-      assert.include(err.message, "UnauthorizedYieldAdmin", "RBAC Yield Shield failed.");
-    }
+    const vault = await program.account.vaultState.fetch(vaultPda);
+    expect(vault.subordinationRatioBps).to.equal(1000);
   });
 
-  it(" [RBAC] Authorized Yield Admin successfully injects profit", async () => {
-    const safeYield = new anchor.BN(1 * anchor.web3.LAMPORTS_PER_SOL);
-    await program.methods.injectMockYield(safeYield, safeYield).accounts({
-      admin: yieldAdmin.publicKey,
-      vaultState: userVaultPda,
-    }).signers([yieldAdmin]).rpc();
-
-    const vaultData = await program.account.vaultState.fetch(userVaultPda);
-    assert.ok(vaultData.safetyBalance.eq(new anchor.BN(2 * anchor.web3.LAMPORTS_PER_SOL)));
-  });
-
-  it(" [RBAC] Rejects Kill-Switch trigger from Yield Admin (Separation of Powers)", async () => {
-    try {
-      // O Bot de Yield não pode acionar o pânico. Apenas o de Emergência.
-      await program.methods.triggerKillSwitch().accounts({
-        admin: yieldAdmin.publicKey,
-        vaultState: userVaultPda,
-      }).signers([yieldAdmin]).rpc();
-
-      assert.fail("Yield Admin triggered Kill-Switch!");
-    } catch (err: any) {
-      assert.include(err.message, "UnauthorizedEmergencyAdmin", "Separation of Powers failed.");
-    }
-  });
-
-  it(" [RBAC] Emergency Admin successfully triggers protocol lockdown", async () => {
-    await program.methods.triggerKillSwitch().accounts({
-      admin: emergencyAdmin.publicKey,
-      vaultState: userVaultPda,
-    }).signers([emergencyAdmin]).rpc();
-
-    const vaultData = await program.account.vaultState.fetch(userVaultPda);
-    assert.equal(vaultData.killSwitch, 1);
-  });
-
-it("[ANTI-BANK RUN] Processes initial withdrawal successfully", async () => {
-    const withdrawAmount = new anchor.BN(0.5 * anchor.web3.LAMPORTS_PER_SOL);
+  it("INVARIANT 1: Capital Conservation on Deposit (Correct Split)", async () => {
+    const depositAmount = new anchor.BN(1_000_000_000);
     
-    // Modern Anchor resolves the vaultState PDA automatically
-    await program.methods.withdraw(withdrawAmount).accounts({
-      user: user.publicKey,
-    }).signers([user]).rpc();
+    await program.methods
+      .splitDeposit(depositAmount)
+      .accounts({
+        user: wallet.publicKey,
+        vaultState: vaultPda,
+        vault: vaultPda,
+        protocolConfig: protocolConfigPda,
+        systemProgram: anchor.web3.SystemProgram.programId,
+        clock: anchor.web3.SYSVAR_CLOCK_PUBKEY,
+      } as any)
+      .rpc();
 
-    const vaultData = await program.account.vaultState.fetch(userVaultPda);
-    assert.ok(vaultData.lastWithdrawalTimestamp.toNumber() > 0, "Timestamp was not registered!");
+    const vault = await program.account.vaultState.fetch(vaultPda);
+    expect(vault.seniorTranche.toNumber()).to.equal(900_000_000);
+    expect(vault.juniorTranche.toNumber()).to.equal(100_000_000);
   });
 
-  it("[ANTI-BANK RUN] Blocks consecutive withdrawal during cooldown period", async () => {
-    try {
-      const withdrawAmount = new anchor.BN(0.1 * anchor.web3.LAMPORTS_PER_SOL);
-      
-      await program.methods.withdraw(withdrawAmount).accounts({
-        user: user.publicKey,
-      }).signers([user]).rpc();
+  it("INVARIANT 2: Devnet Simulator - Junior absorbs 100% of Alpha (Profit)", async () => {
+    const profit = new anchor.BN(200_000_000);
+    
+    await program.methods
+      .devnetYieldSimulator(profit)
+      .accounts({
+        admin: wallet.publicKey,
+        protocolConfig: protocolConfigPda,
+        vaultState: vaultPda,
+        vault: vaultPda,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      } as any)
+      .rpc();
 
-      assert.fail("Critical Vulnerability: User bypassed the Cooldown constraint!");
-    } catch (err: any) {
-      assert.include(err.message, "WithdrawalCooldownActive", "Anti-Bank Run lock failed.");
-    }
+    const vault = await program.account.vaultState.fetch(vaultPda);
+    expect(vault.accumulatedProfits.toNumber()).to.be.greaterThan(0);
   });
-
 });

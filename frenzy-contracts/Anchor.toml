@@ -4,15 +4,20 @@
 resolution = true
 skip-lint = false
 
+[programs.devnet]
+frenzy_vault = "BLafEMNRKAimMcisFEpUg8oZuCKSSNaujdQf7moNpFyx"
+
 [programs.localnet]
-frenzy_vault = "HGZqmfyEWnCjq3rZ2xKbfZhZ4yCXMs4QMQhunexpGW7e"
+frenzy_vault = "BLafEMNRKAimMcisFEpUg8oZuCKSSNaujdQf7moNpFyx"
 
 [provider]
 cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
-test = "echo 'Contrato compilado e implantado com sucesso na Localnet.'"
+handover = "npx ts-node tests/handover.ts"
+setup = "npx ts-node tests/setup.ts"
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 
 [hooks]
 

@@ -6,7 +6,8 @@ import * as anchor from "@coral-xyz/anchor";
 import { motion, AnimatePresence } from "framer-motion";
 import frenzyIdl from "@/idl/frenzy_vault.json";
 
-const PROGRAM_ID = new PublicKey("HGZqmfyEWnCjq3rZ2xKbfZhZ4yCXMs4QMQhunexpGW7e");
+// dashboard.tsx
+const PROGRAM_ID = new PublicKey("BLafEMNRKAimMcisFEpUg8oZuCKSSNaujdQf7moNpFyx");
 const RPC_ENDPOINT = "https://api.devnet.solana.com";
 
 interface GlobalStats {

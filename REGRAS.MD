@@ -1,62 +1,38 @@
-Quais são as informações obrigatórias no formulário de submissão do projeto?
-Os projetos do Hackathon deverão fornecer o seguinte:
+O MAPA DA CIRURGIA FINAL (Rumo aos 100/100)
+Fase 1: O Novo Banco de Dados (Reestruturação do Estado)
 
-Nome do produto e breve descrição
+Onde: src/state/vault.rs
 
-Em qual(is) trilha(s) de hackathon você está se inscrevendo?
+O que faremos: Vamos abandonar a estrutura amadora e adicionar as variáveis de "fundo real". O ProtocolConfig (estado global) vai ganhar um limite diário de saques (A Trava Global Anti-Sybil). O VaultState vai ganhar o subordination_ratio_bps (A margem de segurança configurável que substitui o 50/50) e a contabilização de perdas/lucros acumulados.
 
-Uma lista de colegas de equipe, com contexto sobre sua formação e experiências anteriores.
+Fase 2: O Motor de Subordinação (Inicialização e Depósito)
 
-Localização da equipe
+Onde: src/instructions/initialize.rs e src/instructions/deposit.rs
 
-Um logotipo ou gráfico de produto
+O que faremos: Vamos alterar a criação do cofre para que você (o Admin) defina o tamanho da proteção (ex: 20% Júnior, 80% Sênior). No depósito, em vez de rachar o dinheiro no meio cego, o contrato vai ler essa porcentagem e alocar o capital respeitando o risco real de um fundo FIDC.
 
-Link(s) para repositório no Github ou GitLab
+Fase 3: A Muralha Anti-Bank Run Sistêmica (Saque)
 
-Embora repositórios de código aberto sejam incentivados, você pode manter seu repositório privado. Caso decida tornar seu código de código fechado, é necessário compartilhá-lo com hackathon@colosseum.org para que os organizadores e jurados do hackathon possam analisá-lo.
+Onde: src/instructions/withdraw.rs
 
-Link para um vídeo de apresentação
+O que faremos: Além do relógio individual de 24h, vamos puxar o estado global e checar: "O protocolo inteiro já sacou mais do que o limite permitido hoje?". Se sim, a porta fecha para todo mundo. Isso mata qualquer ataque hacker com múltiplas carteiras (Ataque Sybil) e garante a nota máxima da Adevar.
 
-Link para um vídeo de visão geral técnica
+Fase 4: A Blindagem do Oráculo (A Injeção de Yield)
 
-Todas as apresentações devem ser enviadas em formato de vídeo. Os vídeos não devem ter mais de 3 minutos de duração.
+Onde: src/instructions/inject_yield.rs e src/lib.rs
 
-Os participantes do hackathon devem encarar seus projetos como uma apresentação para potenciais investidores e uma candidatura para a aceleradora Colosseum. Por isso, é fundamental dedicar tempo suficiente para garantir que o vídeo da apresentação seja claro, conciso e de alta qualidade.
+O que faremos: Vamos mudar o nome da função para devnet_yield_simulator. A grande jogada aqui será colocar a "Feature Flag" do Rust (#[cfg(feature = "devnet-simulation")]). Isso prova pro juiz que esse código de injeção de lucros falsos é fisicamente impossível de ser rodado na Mainnet (onde ficaria o dinheiro real).
 
-Como os projetos serão avaliados?
-Antes de mais nada, lembre-se de que os hackathons da Colosseum são competições de startups. Após o envio dos projetos, eles são avaliados em várias rodadas de julgamento para determinar uma lista de finalistas com base na análise de todos os materiais submetidos. Embora os hackathons da Colosseum sejam concebidos como uma corrida contra o tempo pelo desenvolvimento técnico de um novo produto, é importante que todos os participantes dediquem tempo ao aprimoramento do marketing e da apresentação, bem como do código. Todos os projetos serão avaliados e os jurados levarão em consideração os seguintes fatores:
+Fase 5: A Prova dos Nove (Os Testes Invariantes)
 
-Fundador + Adequação ao Mercado: Quem é a equipe que está criando este produto? A equipe possui as habilidades e a experiência necessárias para ter sucesso no mercado em que está entrando? Por que eles estão interessados ​​em criar uma solução para o problema que se propuseram a resolver?
+Onde: Pasta raiz de testes (tests/invariants.ts ou direto no Rust, dependendo de como você roda os testes).
 
-Análise: A equipe fundadora possui alguma visão única baseada em seu profundo conhecimento do problema em questão? Existe alguma nova tecnologia ou tendência que crie uma oportunidade para o sucesso da startup?
+O que faremos: Vamos escrever os scripts que provam para a Adevar que a matemática bate. Scripts que afirmam: Total Sênior + Total Júnior = Dinheiro Total do Cofre. Sem essa prova matemática documentada, eles não dão o prêmio de $50k.
 
-Produto + Execução: Quão bem o produto funciona? Como ele se compara à concorrência? Com ​​que rapidez a equipe está lançando atualizações do produto e respondendo ao feedback dos usuários?
+Fase 6: O Reset e o Relançamento (Deploy e Frontend)
 
-Tamanho potencial do mercado: Qual é o tamanho total do mercado endereçável para este projeto? Ele já é grande ou pequeno, mas está crescendo rapidamente? Qual será o impacto deste projeto na taxa de crescimento desse mercado?
+Onde: Terminal e page.tsx
 
-Comunicação dos Fundadores: Os fundadores estão comunicando claramente a visão do produto e são capazes de expandir a base de usuários do produto?
-
-Viabilidade: Existe um negócio escalável e sustentável que possa ser construído em torno deste projeto? Essencialmente, os hackathons da Colosseum (assim como o Eternal) são competições de startups, portanto, isso é crucial. Certifique-se de reservar tempo suficiente em sua apresentação para fornecer uma visão holística da sua startup.
-
-Após a avaliação individual dos jurados, a equipe do Colosseum entrará em contato com eles para selecionar os vencedores, levando em consideração o feedback e as notas recebidas. Os vencedores do evento serão anunciados aproximadamente um mês após a data de inscrição no hackathon.
-
-O que você procura em um repositório do Github enviado?
-Entendemos que startups entregam código rapidamente para cumprir prazos, e que sistemas e abordagens podem mudar com frequência. Acima de tudo, queremos ver que você e sua equipe:
-
-Realizei um trabalho significativo durante o hackathon.
-
-Fomos nós que deveríamos realizar esse trabalho, e não uma empresa terceirizada.
-
-Desenvolvimento de funcionalidades priorizado estrategicamente
-
-Implementei alguma integração com o Solana.
-
-
-Algumas coisas que NÃO estamos procurando:
-
-Utilizando uma linguagem ou estrutura específica
-
-Padrões de projeto específicos, melhores práticas ou verificações de qualidade de código.
-
-O que é necessário nas atualizações semanais?
-As atualizações semanais são a sua oportunidade de compartilhar o seu progresso ao longo do processo, ajudando você a manter o foco e fornecendo aos jurados um contexto adicional sobre o desenvolvimento do seu produto. Elas não são estritamente obrigatórias para todos os participantes, mas recomendamos fortemente que todos que levam a competição a sério as enviem. Cada atualização deve ser um vídeo conciso (1 minuto) destacando os progressos e os principais desafios da semana anterior.
+O que faremos: 1. Apagamos o histórico antigo da Devnet (reset).
+2. Rodamos o anchor build final e o anchor deploy para jogar o contrato blindado na blockchain.
+3. Pegamos a nova ID do programa (se mudar) e atualizamos o seu Dashboard (Next.js) para ler as variáveis novas (que não se chamam mais 50/50).
