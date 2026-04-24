@@ -107,3 +107,64 @@ Seu relatório de experiência do desenvolvedor ( DX-REPORT.mdno seu repositóri
 
 O e-mail associado à sua conta da Plataforma de Desenvolvedores (para que possamos cruzar seus dados de uso).
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FASE 1: Auditoria e Adequação do Core On-Chain (Rust/Anchor)
+Objetivo: Garantir que o cofre FRENZY aceite liquidez em stablecoin (USDC) mantendo a subordinação 90/10 sem alterar a segurança matemática.
+
+Ações: * Validar a instrução de depósito atual.
+
+Injetar o suporte a SPL Token (se necessário) no contexto.
+
+Certificar que a segurança zero-trust e as travas de tempo (Bank Run) continuam blindadas com o novo ativo.
+
+FASE 2: Orquestração Atômica (Integração Jupiter V2 API)
+Objetivo: Construir o pipeline de dados que transforma a intenção do usuário (SOL) em RWA institucional (USDC) em uma única transação.
+
+Ações:
+
+Configurar a infraestrutura no frenzy-blinks-ui (ou frenzy-agent-backend) para bater no endpoint /quote da Jupiter para achar a melhor rota SOL -> USDC.
+
+Bater no endpoint /build da Jupiter para extrair as instruções brutas (IXs) de swap.
+
+Empacotar as IXs da Jupiter com a IX do nosso contrato Anchor em uma única VersionedTransaction.
+
+FASE 3: Enriquecimento de Dados Off-Chain (Jupiter Price & Token APIs)
+Objetivo: Refletir a estabilidade do RWA no frontend, mostrando dados institucionais em tempo real.
+
+Ações:
+
+Integrar a Jupiter Price API no dashboard analítico global.
+
+Exibir o TVL (Total Value Locked) do cofre em dólares reais com precisão de centavos, atualizando em tempo real.
+
+Consumir metadados para garantir que o USDC manipulado é a mint address oficial da Circle, evitando spoofing de tokens.
+
+FASE 4: O Dossiê de Engenharia (Relatório DX - 60% da nota)
+Objetivo: Farmar a premiação atacando exatamente a dor da equipe da Jupiter.
+
+Ações:
+
+Plugar a documentação MCP deles no nosso ambiente (Cursor/Claude).
+
+Registrar um log agressivo de cada gargalo encontrado: latência da API, falta de tipagem no TypeScript, mensagens de erro pouco claras na montagem da transação atômica.
+
+Redigir o arquivo DX-REPORT.md detalhando como a stack de IA deles ajudou (ou atrapalhou) e como a plataforma deles deveria ser redesenhada sob a ótica de um desenvolvedor focado em infraestrutura bancária.

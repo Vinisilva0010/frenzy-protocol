@@ -147,7 +147,7 @@ export const POST = async (req: Request) => {
       PROGRAM_ID
     );
 
-    // ✅ ADICIONADO: protocolConfig necessário para splitDeposit
+    //  ADICIONADO: protocolConfig necessário para splitDeposit
     const [protocolConfigPda] = PublicKey.findProgramAddressSync(
       [Buffer.from("protocol_config")],
       PROGRAM_ID
@@ -175,7 +175,7 @@ export const POST = async (req: Request) => {
       .splitDeposit(lamports)
       .accounts({
         user: account,
-        protocolConfig: protocolConfigPda, // ✅ ADICIONADO
+        protocolConfig: protocolConfigPda, //  ADICIONADO
         vaultState: vaultPda,
         systemProgram: SystemProgram.programId,
         // clock: REMOVIDO — não existe mais no contrato

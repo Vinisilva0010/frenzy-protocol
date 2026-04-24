@@ -6,8 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 const NAV_LINKS = [
   { name: "ENTER VAULT", href: "/demo" },
   { name: "PORTFOLIO", href: "/dashboard" },
-  { name: "GLOBAL STATS", href: "/analytics" },
-  { name: "FAQ", href: "/faq" },
+  { name: "GLOBAL STATS", href: "/Analytics" },
+  { name: "FAQ", href: "/FaqSelection" },
 ];
 
 export default function Navbar() {
@@ -123,10 +123,10 @@ export default function Navbar() {
 
             {/* BOTÕES DE AÇÃO MOBILE */}
             <div className="flex flex-col w-full max-w-sm gap-4 mt-8">
-              <a href="/conservative" onClick={toggleMenu} className="bg-white border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
+              <a href="/whitepaper" onClick={toggleMenu} className="bg-white border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
                 90% SENIOR
               </a>
-              <a href="/junior" onClick={toggleMenu} className="bg-[#FFE600] border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
+              <a href="/alpha" onClick={toggleMenu} className="bg-[#FFE600] border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
                 10% JUNIOR
               </a>
               <a href="/security" onClick={toggleMenu} className="bg-[#14F195] border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
