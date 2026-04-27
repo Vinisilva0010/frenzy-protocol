@@ -115,7 +115,7 @@ function DashboardContent() {
       const { vaultPda } = getPdas(publicKey);
 
       const signature = await program.methods
-        .initialize(2000)
+        .initialize(1000)
         .accounts({ authority: publicKey, vaultState: vaultPda })
         .rpc();
 

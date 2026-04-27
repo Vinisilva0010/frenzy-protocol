@@ -63,7 +63,7 @@ export default function VideoPanel() {
       if (!w.YT || !w.YT.Player || playerRef.current) return;
 
       playerRef.current = new w.YT.Player("youtube-player", {
-        videoId: "QVtV_r97h4Y",
+        videoId: "",
         playerVars: {
           autoplay: 0,
           controls: 1,

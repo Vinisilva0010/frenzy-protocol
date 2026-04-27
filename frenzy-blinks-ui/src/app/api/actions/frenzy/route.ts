@@ -160,7 +160,7 @@ export const POST = async (req: Request) => {
 
     if (!vaultAccountInfo) {
       const initIx = await program.methods
-        .initialize(2000) // ✅ CORRIGIDO: 2000bps (20%) — consistente com dashboard
+        .initialize(1000) // ✅ CORRIGIDO: 2000bps (20%) — consistente com dashboard
         .accounts({
           authority: account,
           vaultState: vaultPda,

@@ -6,8 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 const NAV_LINKS = [
   { name: "ENTER VAULT", href: "/demo" },
   { name: "PORTFOLIO", href: "/dashboard" },
-  { name: "GLOBAL STATS", href: "/Analytics" },
-  { name: "FAQ", href: "/FaqSelection" },
+  { name: "GLOBAL STATS", href: "/radar" },
+  { name: "FAQ", href: "/faq" },
 ];
 
 export default function Navbar() {
@@ -60,13 +60,13 @@ export default function Navbar() {
           {/* BOTÕES DE AÇÃO BRUTALISTAS */}
           <div className="flex items-center gap-4 ml-4">
             <a 
-              href="/conservative" 
+              href="/whitepaper" 
               className="bg-white border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
             >
               90% SENIOR
             </a>
             <a 
-              href="/junior" 
+              href="/alpha" 
               className="bg-[#FFE600] border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
             >
               10% JUNIOR

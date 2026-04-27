@@ -108,7 +108,7 @@ const program = new anchor.Program(idl, provider);
   console.log("\n🔍 Initializing Phase 2 Vault...");
   try {
     const sig = await (program.methods as any)
-      .initialize(2000) // 20% junior subordination
+      .initialize(1000) // 10% junior subordination
       .accounts({
         authority: adminKeypair.publicKey,
         vaultState: vaultPda,
