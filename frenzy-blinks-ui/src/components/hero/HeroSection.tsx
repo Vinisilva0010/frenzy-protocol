@@ -24,7 +24,7 @@ const titleWhiteStyle = {
   textShadow: "clamp(4px, 0.8vw, 10px) clamp(4px, 0.8vw, 10px) 0px #000",
 } as React.CSSProperties;
 
-const FRENZY_LETTERS   = ["F", "R", "E", "N", "Z", "Y"];
+const FRENZY_LETTERS   = ["S", "T", "R", "A", "T", "A"];
 const PROTOCOL_LETTERS = ["P", "R", "O", "T", "O", "C", "O", "L"];
 
 // Componente de letra com efeito de túnel
