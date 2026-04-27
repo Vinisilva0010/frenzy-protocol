@@ -9,7 +9,7 @@ const STORY_DATA = [
     step: 1,
     image: "/hacker-1.webp",
     title: "THE SYSTEMIC DEFAULT",
-    desc: "A massive default hits the real-world credit portfolio. Traditional DeFi would face insolvency and panic, but FRENZY's institutional engine is ready. 90% of the capital is shielded in the Senior Tranche.",
+    desc: "A massive default hits the real-world credit portfolio. Traditional DeFi would face insolvency and panic, but STRATA's institutional engine is ready. 90% of the capital is shielded in the Senior Tranche.",
     color: "#9945FF" 
   },
   {

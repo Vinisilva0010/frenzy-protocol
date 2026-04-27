@@ -39,7 +39,7 @@ export default function AlphaPage() {
         {/* 3. CABEÇALHO DO DOSSIÊ */}
         <motion.div initial="hidden" animate="visible" variants={fadeUp} className="mb-16">
           <div className="inline-block bg-black text-[#FF3366] font-mono font-black text-xs md:text-sm px-4 py-1 border-[4px] border-black shadow-[4px_4px_0px_0px_#FF3366] mb-6 uppercase tracking-widest">
-            FRENZY PROTOCOL // OFFICIAL DEEP DIVE
+            STRATA PROTOCOL // OFFICIAL DEEP DIVE
           </div>
           <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9]" style={{ fontFamily: "var(--font-bebas)" }}>
             THE 10% ENGINE: <br/>
@@ -77,7 +77,7 @@ export default function AlphaPage() {
               <strong className="text-2xl md:text-3xl font-black bg-black text-[#FF3366] px-2 uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>Where the 10% of your money goes (Aggressive Profile)</strong>
             </p>
             <p className="mb-6">
-              The Aggressive Profile is FRENZY's risk and reward engine. It was built for the investor who accepts volatility and doesn't mind being the system's "shield", as long as they are disproportionately compensated for it.
+              The Aggressive Profile is STRATA's risk and reward engine. It was built for the investor who accepts volatility and doesn't mind being the system's "shield", as long as they are disproportionately compensated for it.
             </p>
             <p>
               Here, the 10% of the vault's capital acts as the protocol's frontline, assuming the risks in exchange for capturing all the excess profit from the operation.

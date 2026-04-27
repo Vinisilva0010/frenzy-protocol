@@ -31,7 +31,7 @@ export default function Navbar() {
     >
       <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
         
-        {/* LOGO FRENZY */}
+        {/* LOGO STRATA */}
         <a href="#hero" className="flex items-center gap-2 group">
           <span 
             className="text-4xl md:text-5xl font-black tracking-tighter text-black uppercase"
@@ -41,7 +41,7 @@ export default function Navbar() {
               textShadow: "3px 3px 0px #000"
             }}
           >
-            FRENZY
+            STRATA
           </span>
         </a>
 

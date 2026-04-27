@@ -186,7 +186,7 @@ export default function VideoPanel() {
               className="text-black font-black uppercase tracking-widest text-sm md:text-xl"
               style={{ fontFamily: "var(--font-fira)" }}
             >
-              // FRENZY CORE BRIEFING
+              // STRATA CORE BRIEFING
             </h3>
           </div>
 

@@ -64,7 +64,7 @@ export default function Footer() {
             textShadow: "10px 10px 0px #000"
           }}
         >
-          FRENZY
+          STRATA
         </h2>
         <p className="mt-8 text-black font-mono text-lg md:text-xl font-bold uppercase tracking-widest max-w-2xl bg-white border-4 border-black px-6 py-2 shadow-[4px_4px_0px_0px_#000]">
           Liquidity divided. Chaos multiplied.
@@ -115,7 +115,7 @@ export default function Footer() {
       {/* 3. RODAPÉ FINAL (COPYRIGHT & ZANVEXIS CREDIT) */}
       <div className="w-full bg-[#14F195] border-t-[8px] border-black py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-black font-mono font-bold text-xs md:text-sm uppercase tracking-widest text-center md:text-left">
-          © {new Date().getFullYear()} FRENZY PROTOCOL. ALL RIGHTS RESERVED.
+          © {new Date().getFullYear()} STRATA PROTOCOL. ALL RIGHTS RESERVED.
         </p>
         
         {/* Crédito Oficial da Zanvexis - Exatamente onde deve estar */}

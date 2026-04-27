@@ -167,7 +167,7 @@ export default function DemoPage() {
               <div className="absolute top-0 left-0 w-full p-4 md:p-8 flex justify-between items-start z-50 pointer-events-auto">
                 <div className="bg-white border-[4px] md:border-[6px] border-black p-2 md:p-4 shadow-[4px_4px_0px_0px_#000] md:shadow-[6px_6px_0px_0px_#000]">
                   <h1 className="text-black text-xl md:text-4xl font-black uppercase tracking-tighter leading-none" style={{ fontFamily: "var(--font-bebas)" }}>
-                    FRENZY PROTOCOL
+                    STRATA PROTOCOL
                   </h1>
                   <p className="text-zinc-600 font-mono font-bold uppercase text-[8px] md:text-xs tracking-widest mt-1">
                     Demo Environment

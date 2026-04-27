@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Banco de dados do FAQ baseado na documentação tática do FRENZY
+// Banco de dados do FAQ baseado na documentação tática do STRATA
 const FAQ_DATA = [
   {
     id: "01",
@@ -30,14 +30,14 @@ const FAQ_DATA = [
     id: "04",
     question: "IS THIS LIVE WITH REAL MONEY OR JUST A PROOF OF CONCEPT?",
     answer:
-      "Right now, FRENZY runs as a Proof of Concept on Solana test environments. The smart contracts, tranche math and default/waterfall logic are real and executable on-chain, but all off-chain flows (BRL conversion, FIDC allocation, registries) are simulated via the dashboard. No user is exposed to real credit risk at this stage. A mainnet, real-capital deployment would only happen after partnerships with regulated credit platforms and the appropriate licensing path in Brazil.",
+      "Right now, STRATA runs as a Proof of Concept on Solana test environments. The smart contracts, tranche math and default/waterfall logic are real and executable on-chain, but all off-chain flows (BRL conversion, FIDC allocation, registries) are simulated via the dashboard. No user is exposed to real credit risk at this stage. A mainnet, real-capital deployment would only happen after partnerships with regulated credit platforms and the appropriate licensing path in Brazil.",
     color: "#FF3366", // Radioactive Pink
   },
   {
     id: "05",
     question: "HOW DO I DEPOSIT IF THERE IS NO TRADITIONAL DAPP CONNECT BUTTON?",
     answer:
-      "FRENZY is built around Solana Actions and Blinks. Instead of forcing you to go to a separate DeFi dashboard, deposits can be triggered directly from surfaces like X (Twitter) or from lightweight widgets. When you click a Frenzy Action, your wallet still signs a normal Solana transaction, but the entry point is the social feed, not a heavy dapp. Under the hood, it all lands in the same vault smart contract.",
+      "STRATA is built around Solana Actions and Blinks. Instead of forcing you to go to a separate DeFi dashboard, deposits can be triggered directly from surfaces like X (Twitter) or from lightweight widgets. When you click a STRATA Action, your wallet still signs a normal Solana transaction, but the entry point is the social feed, not a heavy dapp. Under the hood, it all lands in the same vault smart contract.",
     color: "#FF00FF", // Neon Pink
   },
   {
@@ -72,7 +72,7 @@ const FAQ_DATA = [
     id: "10",
     question: "HOW DO YOU PLAN TO HANDLE REGULATION AND SECURITIES RULES?",
     answer:
-      "Digitizing claims on Brazilian credit is not a game; it touches securities law. The current hackathon version is deliberately restricted to simulation and testnet. For a real-money deployment, the roadmap includes plugging into tokenization platforms and credit structures that already operate under CVM rules in Brazil, such as regulated FIDCs or sandbox/crowdfunding frameworks. FRENZY is the web3 rails and user experience layer, not a shortcut around regulation.",
+      "Digitizing claims on Brazilian credit is not a game; it touches securities law. The current hackathon version is deliberately restricted to simulation and testnet. For a real-money deployment, the roadmap includes plugging into tokenization platforms and credit structures that already operate under CVM rules in Brazil, such as regulated FIDCs or sandbox/crowdfunding frameworks. STRATA is the web3 rails and user experience layer, not a shortcut around regulation.",
     color: "#A855F7", // Purple
   },
 ];

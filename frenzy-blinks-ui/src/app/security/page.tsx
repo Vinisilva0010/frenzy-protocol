@@ -118,7 +118,7 @@ export default function SecurityAuditPage() {
             <div>
               <h3 className="font-black font-mono text-xl uppercase mb-4 text-[#FF3366]">No Global Honeypots</h3>
               <p className="mb-6">
-                Most DeFi protocols pool all user funds into massive, single contracts—creating a multi-million dollar target for hackers. FRENZY is different. We engineered an <strong className="text-black bg-[#00E1FD] px-1">Isolated Vault Architecture</strong>.
+                Most DeFi protocols pool all user funds into massive, single contracts—creating a multi-million dollar target for hackers. STRATAis different. We engineered an <strong className="text-black bg-[#00E1FD] px-1">Isolated Vault Architecture</strong>.
               </p>
               <p>
                 Every user gets their own cryptographically isolated PDA (Program Derived Address). An attack vector on one state cannot cause systemic cascading failures across the protocol.

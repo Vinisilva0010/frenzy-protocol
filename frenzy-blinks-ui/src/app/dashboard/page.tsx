@@ -250,7 +250,7 @@ function DashboardContent() {
             Acesso Restrito
           </div>
           <h2 className="text-white text-5xl md:text-6xl font-black uppercase tracking-tighter leading-none mb-4" style={{ fontFamily: "var(--font-bebas)" }}>
-            BEM-VINDO AO FRENZY PROTOCOL
+            BEM-VINDO AO STRATA PROTOCOL
           </h2>
           <p className="text-zinc-400 font-mono text-sm md:text-base uppercase max-w-2xl mx-auto mb-10 leading-relaxed">
             Você está a um clique de acessar o mercado de crédito privado brasileiro (FIDC).

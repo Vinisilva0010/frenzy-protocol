@@ -83,7 +83,7 @@ export default function AnalyticsPage() {
       content: (
         <>
           <p className="text-black font-mono font-bold text-base md:text-xl leading-relaxed uppercase">
-            You are looking at the FRENZY Global Radar.
+            You are looking at the STRATA Global Radar.
           </p>
           <p className="text-zinc-600 font-mono text-sm md:text-base mt-4 font-bold uppercase">
             This terminal maps the total liquidity and status of every autonomous vault currently executing on the Solana Network. Select a data node below.

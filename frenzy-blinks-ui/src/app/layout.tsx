@@ -14,7 +14,7 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "FRENZY PROTOCOL",
+  title: "STRATA PROTOCOL",
   description: "50% Peace of Mind. 50% Full Throttle.",
 };
 

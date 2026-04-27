@@ -59,7 +59,7 @@ export const GET = async (req: Request) => {
   }
 
   const payload: ActionGetResponse = {
-    title: "FRENZY Protocol",
+    title: "STRATA Protocol",
     icon: "https://ucarecdn.com/7aa46c85-08a4-4bc7-9376-88ec48bb1f43/-/preview/880x864/-/quality/smart/-/format/auto/",
     description: "Define your HFT strategy. Enter the amount to deposit and let the protocol split your risk.",
     label: "Deposit",
@@ -199,7 +199,7 @@ export const POST = async (req: Request) => {
       fields: {
         type: "transaction",
         transaction: tx,
-        message: `Success. Routing ${amount} SOL to FRENZY Protocol Vaults.`,
+        message: `Success. Routing ${amount} SOL to STRATA Protocol Vaults.`,
       },
     });
 

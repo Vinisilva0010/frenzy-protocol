@@ -39,7 +39,7 @@ export default function ConservativePage() {
         {/* 3. CABEÇALHO DO DOSSIÊ */}
         <motion.div initial="hidden" animate="visible" variants={fadeUp} className="mb-16">
           <div className="inline-block bg-black text-[#00E1FD] font-mono font-black text-xs md:text-sm px-4 py-1 border-[4px] border-black shadow-[4px_4px_0px_0px_#00E1FD] mb-6 uppercase tracking-widest">
-            FRENZY PROTOCOL // OFFICIAL DEEP DIVE
+           STRATA PROTOCOL // OFFICIAL DEEP DIVE
           </div>
           <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9]" style={{ fontFamily: "var(--font-bebas)" }}>
             THE 90% SHIELD: <br/>
@@ -90,7 +90,7 @@ export default function ConservativePage() {
               <strong className="text-2xl md:text-3xl font-black bg-[#00E1FD] text-black px-2 uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>1. Where the money goes when you deposit</strong>
             </p>
             <p className="mb-6">
-              When you deposit into FRENZY, the money doesn't go to a person's or company's account. It enters a smart contract on the Solana network, a "code vault" that registers everything publicly and automatically.
+              When you deposit into STRATA, the money doesn't go to a person's or company's account. It enters a smart contract on the Solana network, a "code vault" that registers everything publicly and automatically.
             </p>
             <p>
               Inside this vault, the system separates the capital into two parts: 90% goes to the Conservative Profile (you are here) and 10% goes to the Aggressive Profile, which takes on more risk in exchange for higher potential returns.
@@ -135,10 +135,10 @@ export default function ConservativePage() {
               The idea is to track the logic of Brazilian fixed income, which typically uses the CDI (Interbank Deposit Certificate) as a benchmark, currently hovering around 14–15% per year (varying over time).
             </p>
             <p className="mb-6">
-              Structured credit funds similar to what inspired FRENZY usually aim for ranges like "CDI plus a credit premium", something like CDI +2% to CDI +5% per year, depending on the risk, the quality of the receivables, and the market scenario.
+              Structured credit funds similar to what inspired STRATA usually aim for ranges like "CDI plus a credit premium", something like CDI +2% to CDI +5% per year, depending on the risk, the quality of the receivables, and the market scenario.
             </p>
             <p>
-              FRENZY is inspired by this type of operation, but does not guarantee an exact percentage: the actual return may fall above or below this range, depending on the behavior of the economy, interest rates, and the credit portfolio.
+              STRATA is inspired by this type of operation, but does not guarantee an exact percentage: the actual return may fall above or below this range, depending on the behavior of the economy, interest rates, and the credit portfolio.
             </p>
           </motion.section>
 
@@ -158,7 +158,7 @@ export default function ConservativePage() {
               <strong className="text-2xl md:text-3xl font-black bg-[#9945FF] text-white px-2 uppercase tracking-tighter" style={{ fontFamily: "var(--font-bebas)" }}>4. How the 10% protects your 90%</strong>
             </p>
             <p className="mb-6">
-              All credit carries default risk. To protect the Conservative Profile, FRENZY uses a classic "protection layers" model.
+              All credit carries default risk. To protect the Conservative Profile, STRATA uses a classic "protection layers" model.
             </p>
             <p className="mb-6">
               The 90% of the Conservative Profile sit on top, with priority of payment; the 10% of the Aggressive Profile sit at the bottom and act as the "first loss piece".
@@ -193,7 +193,7 @@ export default function ConservativePage() {
               Unlike an idle balance in a digital account, corporate credit doesn't return instantly.
             </p>
             <p className="mb-6">
-              Because your money is financing real-world operations, FRENZY does not offer T+0 (instant) withdrawals in this Conservative Profile.
+              Because your money is financing real-world operations, STRATA does not offer T+0 (instant) withdrawals in this Conservative Profile.
             </p>
             <p className="mb-6">
               Redemption requests follow liquidity windows aligned with the credit portfolio—for example, T+30 windows, similar to credit funds and other fixed-income products dealing with less liquid assets.
