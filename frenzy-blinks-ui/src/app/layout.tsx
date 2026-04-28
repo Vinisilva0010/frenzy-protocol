@@ -15,7 +15,7 @@ const firaCode = Fira_Code({
 
 export const metadata: Metadata = {
   title: "STRATA PROTOCOL",
-  description: "50% Peace of Mind. 50% Full Throttle.",
+  description: "90% Peace of Mind. 10% Full Throttle.",
 };
 
 export default function RootLayout({
