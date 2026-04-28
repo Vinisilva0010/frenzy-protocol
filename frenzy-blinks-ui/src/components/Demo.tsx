@@ -40,7 +40,7 @@ function BlinkRenderer() {
   
   const API_URL = process.env.NODE_ENV === 'development' 
     ? 'http://localhost:3000' 
-    : 'https://frenzy.zanvexis.com';
+    : 'https://strata.zanvexis.com';
 
   const { blink, isLoading } = useBlink({ 
     url: `${API_URL}/api/actions/frenzy`

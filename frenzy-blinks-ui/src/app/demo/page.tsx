@@ -41,7 +41,7 @@ function BlinkRenderer() {
   // 🔥 A MÁGICA ENTRA AQUI: O Next.js decide o link sozinho!
   const API_URL = process.env.NODE_ENV === 'development' 
     ? 'http://localhost:3000' 
-    : 'https://frenzy.zanvexis.com';
+    : 'https://strata.zanvexis.com';
 
   const { blink, isLoading } = useBlink({ 
     // Usando a crase (`) para juntar a variável com o resto do caminho
