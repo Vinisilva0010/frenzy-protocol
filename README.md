@@ -2,9 +2,9 @@
 
 > A Solana vault that routes onchain capital into Brazilian structured credit — with institutional-grade tranche isolation built directly into the smart contract.
 
-- 🌐 **Live demo:** [https://strata.zanvexis.com](https://strata.zanvexis.com)
-- 🔗 **Devnet program:** `[INSERT PROGRAM ID]`
-- 🎥 **Submission video:** `[INSERT LOOM LINK]`
+-  **Live demo:** [https://strata.zanvexis.com](https://strata.zanvexis.com)
+-  **Devnet program:** `BLafEMNRKAimMcisFEpUg8oZuCKSSNaujdQf7moNpFyx`
+-  **Submission video:** `[INSERT LOOM LINK]`
 
 ---
 
@@ -33,7 +33,7 @@ In production, vault liquidity is routed through regulated Brazilian credit vehi
 
 ## Why This Market
 
-Brazil runs the largest FIDC market in Latin America. As of 2024, total FIDC net equity exceeded **R$ 600 billion**. The underlying assets — receivables, payroll credit, agribusiness contracts — generate consistent yield regardless of crypto market conditions.
+Brazil runs the largest FIDC market in Latin America. As of 2024, total FIDC net equity exceeded **R$ 830 billion**. The underlying assets — receivables, payroll credit, agribusiness contracts — generate consistent yield regardless of crypto market conditions.
 
 No Solana protocol currently offers direct structured exposure to this market. STRATA is the entry point.
 
@@ -144,7 +144,7 @@ yarn dev
 | Resource | URL |
 |---|---|
 | Live site | [https://strata.zanvexis.com](https://strata.zanvexis.com) |
-| Analytics dashboard | [https://strata.zanvexis.com/analytics](https://strata.zanvexis.com/analytics) |
+| Analytics dashboard | [https://strata.zanvexis.com/analytics](https://strata.zanvexis.com/radar) |
 | GitHub | [https://github.com/Vinisilva0010/frenzy-protocol](https://github.com/Vinisilva0010/frenzy-protocol) |
 | Submission video | `[INSERT LOOM LINK]` |
-| Devnet program ID | `[INSERT PROGRAM ID]` |
+| Devnet program ID | `BLafEMNRKAimMcisFEpUg8oZuCKSSNaujdQf7moNpFyx` |
