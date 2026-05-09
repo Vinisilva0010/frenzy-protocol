@@ -77,6 +77,12 @@ export default function Navbar() {
             >
               SECURITY & DOCS
             </a>
+            <a 
+              href="/evolution" 
+              className="bg-[#14F195] border-4 border-black px-4 py-2 text-black font-black uppercase text-xs shadow-[4px_4px_0px_0px_#000] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all"
+            >
+              EVOLUTION & DOCS
+            </a>
           </div>
         </div>
 
@@ -131,6 +137,9 @@ export default function Navbar() {
               </a>
               <a href="/security" onClick={toggleMenu} className="bg-[#14F195] border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
                 SECURITY & DOCS
+              </a>
+              <a href="/evolution" onClick={toggleMenu} className="bg-[#14F195] border-4 border-black p-4 text-center text-black font-black text-xl uppercase shadow-[6px_6px_0px_0px_#000] active:translate-x-1 active:translate-y-1 active:shadow-none">
+                EVOLUTION & DOCS
               </a>
             </div>
           </motion.div>
