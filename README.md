@@ -4,7 +4,7 @@
 
 -  **Live demo:** [https://strata.zanvexis.com](https://strata.zanvexis.com)
 -  **Devnet program:** `BLafEMNRKAimMcisFEpUg8oZuCKSSNaujdQf7moNpFyx`
--  **Submission video:** `[INSERT LOOM LINK]`
+-  **Submission video:** `https://www.youtube.com/watch?v=le33gSmH1-8`
 
 ---
 
