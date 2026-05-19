@@ -107,8 +107,8 @@ Public vault creation, secondary market for tranche shares, mobile-native Blinks
 
 ## Team
 
-- **[YOUR NAME]** — Founder and lead engineer. Solana / Anchor / Rust. Responsible for smart contract architecture, tranche engine design and frontend integration.
-- *[ADD OTHER TEAM MEMBERS IF APPLICABLE — role, background, full-time status]*
+- **vinicius** — Founder and lead engineer. Solana / Anchor / Rust. Responsible for smart contract architecture, tranche engine design and frontend integration.
+- *André and Guilherme — role, background, full-time status]*
 
 The team is building full-time. All members are in the same timezone.
 
